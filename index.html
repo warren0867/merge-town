@@ -167,6 +167,7 @@ function loadState(){
       if(!S.maxCust)S.maxCust=3;
       if(!S.unlockedTrails)S.unlockedTrails=['tomato'];
       if(!S.unlockedGens)S.unlockedGens=['tomato'];
+      delete S._enStarted; // clean up legacy flag
     }else S=defState();
   }catch{S=defState();}
   const gap=Date.now()-(S.energyLastAt||Date.now());
@@ -420,9 +421,9 @@ function tapGen(trail,btn){
   if(S.energy<=0){toast('⚡ 에너지가 없어요!');vib(30);return;}
   const empty=S.unlocked.filter(i=>!S.board[i]);
   if(!empty.length){toast('보드가 가득 찼어요! 🈵');return;}
+  const wasFull=(S.energy===MAX_EN);
   S.energy--;
-  if(S.energy<MAX_EN&&!S._enStarted){S.energyLastAt=Date.now();S._enStarted=true;}
-  if(S.energy===0)delete S._enStarted;
+  if(wasFull)S.energyLastAt=Date.now();
   const ti=empty[Math.floor(Math.random()*empty.length)];
   S.board[ti]={trail,stage:1};
   vib(20);
@@ -490,6 +491,7 @@ function checkLvUp(){
     }
     if(r.gen&&!S.unlockedGens.includes(r.gen)){
       S.unlockedGens.push(r.gen);S.unlockedTrails.push(r.gen);
+      renderGens();
     }
     if(r.maxCust){
       S.maxCust=r.maxCust;
