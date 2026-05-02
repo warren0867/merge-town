@@ -1,0 +1,14 @@
+{
+  "name": "마을 머지",
+  "short_name": "마을머지",
+  "description": "건물을 합쳐 마을을 완성하는 머지 퍼즐 게임",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#2d6a2d",
+  "theme_color": "#2d6a2d",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icon.png", "sizes": "192x192", "type": "image/png" }
+  ]
+}

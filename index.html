@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="마을머지">
+  <meta name="theme-color" content="#2d6a2d">
+  <link rel="manifest" href="manifest.json">
+  <title>마을 머지</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none}
+    html,body{height:100%;overflow:hidden}
+    body{
+      background:linear-gradient(170deg,#5BA3D9 0%,#78C87B 45%,#2E7D32 100%);
+      display:flex;flex-direction:column;align-items:center;
+      height:100vh;height:100dvh;
+      font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    }
+
+    /* ── HUD ── */
+    #hud{
+      width:100%;max-width:420px;
+      display:flex;justify-content:space-around;align-items:center;
+      padding:10px 8px 6px;flex-shrink:0;
+    }
+    .hud-card{
+      background:rgba(0,0,0,0.38);backdrop-filter:blur(8px);
+      border-radius:18px;padding:6px 14px;
+      display:flex;align-items:center;gap:5px;
+      color:#fff;font-weight:700;font-size:15px;
+      min-width:88px;justify-content:center;
+    }
+
+    /* ── GRID WRAPPER ── */
+    #grid-wrap{
+      width:100%;max-width:420px;flex:1;
+      display:flex;align-items:center;justify-content:center;
+      padding:4px 12px;
+    }
+    #grid{
+      display:grid;grid-template-columns:repeat(5,1fr);gap:5px;
+      width:100%;padding:10px;
+      background:rgba(90,55,20,0.65);
+      border-radius:18px;
+      border:3px solid #7B4A1E;
+      box-shadow:0 6px 24px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+    .cell{
+      aspect-ratio:1;background:rgba(255,255,255,0.14);
+      border-radius:10px;display:flex;align-items:center;justify-content:center;
+      position:relative;border:1.5px solid rgba(255,255,255,0.1);
+      transition:border-color .15s,background .15s;overflow:hidden;
+    }
+    .cell.filled{background:rgba(255,255,255,0.22)}
+    .cell.hl-merge{border-color:#FFD700!important;background:rgba(255,215,0,.28)!important;box-shadow:0 0 12px rgba(255,215,0,.55)}
+    .cell.hl-move {border-color:#90EE90!important;background:rgba(144,238,144,.2)!important}
+    .cell.drag-src{opacity:.35}
+
+    /* ── ITEM ── */
+    .item{
+      width:90%;height:90%;border-radius:8px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      position:relative;
+    }
+    .item .emo{font-size:1.9em;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+    .item .lv{
+      position:absolute;bottom:2px;right:3px;
+      font-size:9px;font-weight:800;color:#fff;
+      text-shadow:0 1px 2px rgba(0,0,0,.9);
+      background:rgba(0,0,0,.45);border-radius:4px;padding:1px 3px;
+    }
+    .item.gen-item{background:rgba(34,139,34,.35)!important;border:1.5px solid rgba(80,200,80,.5)!important;border-radius:8px}
+
+    /* pop animation */
+    @keyframes popAnim{0%{transform:scale(1)}45%{transform:scale(1.38)}100%{transform:scale(1)}}
+    .pop .item{animation:popAnim .32s ease}
+
+    /* ── BOTTOM ── */
+    #bottom{
+      width:100%;max-width:420px;padding:6px 12px 12px;
+      display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;
+    }
+    #energy-row{display:flex;align-items:center;gap:5px}
+    .e-label{font-size:12px;color:rgba(255,255,255,.8);font-weight:600}
+    .e-pip{width:21px;height:21px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.3);transition:background .3s,border-color .3s}
+    .e-pip.on{background:#FFE44D;border-color:#FFB300;box-shadow:0 0 6px rgba(255,180,0,.6)}
+    #btn-row{display:flex;gap:10px;width:100%}
+    .btn{
+      flex:1;padding:11px 0;border:none;border-radius:22px;
+      font-size:15px;font-weight:700;color:#fff;cursor:pointer;
+      box-shadow:0 3px 10px rgba(0,0,0,.2);
+    }
+    #btn-shop{background:linear-gradient(135deg,#FF8C00,#FFD700)}
+    #btn-sell{background:linear-gradient(135deg,#E74C3C,#F1948A)}
+    #btn-sell.active{background:linear-gradient(135deg,#27AE60,#2ECC71)}
+
+    /* ── GHOST ── */
+    #ghost{
+      position:fixed;pointer-events:none;z-index:500;display:none;
+      width:58px;height:58px;border-radius:10px;
+      align-items:center;justify-content:center;
+      font-size:2em;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5));
+      transform:scale(1.2);
+    }
+
+    /* ── SHEET MODAL ── */
+    #overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.52);
+      z-index:800;display:flex;align-items:flex-end;justify-content:center;
+    }
+    #overlay.hidden{display:none!important}
+    .sheet{
+      width:100%;max-width:420px;background:#FFF8EF;
+      border-radius:24px 24px 0 0;padding:20px 16px 34px;
+      max-height:72vh;overflow-y:auto;
+    }
+    .sheet-title{text-align:center;font-size:18px;font-weight:800;margin-bottom:14px;color:#333}
+    .si-btn{
+      display:flex;align-items:center;justify-content:space-between;
+      width:100%;padding:12px 14px;margin-bottom:8px;
+      border-radius:14px;border:2px solid #E0D5C8;background:#fff;
+      font-size:15px;cursor:pointer;
+    }
+    .si-btn:active{background:#F5F0E8}
+    .si-price{font-weight:700;color:#E67E22}
+    .sheet-close{
+      width:100%;padding:12px;border:none;border-radius:14px;
+      background:#E0D5C8;font-size:16px;font-weight:700;cursor:pointer;
+      margin-top:4px;color:#555;
+    }
+
+    /* ── TOAST ── */
+    #toast{
+      position:fixed;bottom:130px;left:50%;transform:translateX(-50%);
+      background:rgba(20,20,20,.85);color:#fff;
+      padding:10px 20px;border-radius:22px;font-size:14px;
+      z-index:900;white-space:nowrap;pointer-events:none;
+      opacity:0;transition:opacity .25s;max-width:85%;text-align:center;
+    }
+    #toast.show{opacity:1}
+
+    /* ── FLOAT REWARD ── */
+    .flt{
+      position:fixed;pointer-events:none;
+      font-size:19px;font-weight:800;color:#FFD700;
+      text-shadow:0 2px 4px rgba(0,0,0,.6);z-index:600;
+      animation:flyUp .9s ease forwards;
+    }
+    @keyframes flyUp{
+      0%  {opacity:1;transform:translateY(0) scale(1)}
+      55% {opacity:1;transform:translateY(-38px) scale(1.18)}
+      100%{opacity:0;transform:translateY(-65px) scale(.9)}
+    }
+
+    /* ── PROGRESS BAR ── */
+    #prog-wrap{
+      width:100%;display:flex;align-items:center;gap:8px;padding:0 4px;
+    }
+    #prog-label{font-size:11px;color:rgba(255,255,255,.75);white-space:nowrap;font-weight:600}
+    #prog-bar{flex:1;height:7px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden}
+    #prog-fill{height:100%;background:linear-gradient(90deg,#FFD700,#FF8C00);border-radius:4px;transition:width .5s ease}
+
+    .hidden{display:none!important}
+  </style>
+</head>
+<body>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="hud-card">🪙 <span id="v-coins">0</span></div>
+  <div class="hud-card">⚡ <span id="v-timer">--:--</span></div>
+  <div class="hud-card">🏆 Lv.<span id="v-maxlv">1</span></div>
+</div>
+
+<!-- Grid -->
+<div id="grid-wrap"><div id="grid"></div></div>
+
+<!-- Bottom -->
+<div id="bottom">
+  <div id="prog-wrap">
+    <span id="prog-label">마을 진행도</span>
+    <div id="prog-bar"><div id="prog-fill" style="width:0%"></div></div>
+  </div>
+  <div id="energy-row"><span class="e-label">에너지</span></div>
+  <div id="btn-row">
+    <button class="btn" id="btn-shop" onclick="openShop()">🏪 상점</button>
+    <button class="btn" id="btn-sell" onclick="toggleSell()">💰 판매</button>
+  </div>
+</div>
+
+<!-- Ghost -->
+<div id="ghost" style="display:none"></div>
+
+<!-- Shop overlay -->
+<div id="overlay" class="hidden" onclick="overlayClick(event)">
+  <div class="sheet">
+    <div class="sheet-title">🏪 상점</div>
+    <div id="shop-list"></div>
+    <button class="sheet-close" onclick="closeShop()">닫기</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════
+const BLDGS = [
+  {lv:1,  name:'텐트',       e:'🏕️', bg:'#C8A97A', c:3    },
+  {lv:2,  name:'오두막',     e:'🛖',  bg:'#A0714F', c:8    },
+  {lv:3,  name:'작은집',     e:'🏠',  bg:'#6BAED6', c:20   },
+  {lv:4,  name:'잔디집',     e:'🏡',  bg:'#74C476', c:45   },
+  {lv:5,  name:'타운하우스', e:'🏘️', bg:'#FD8D3C', c:95   },
+  {lv:6,  name:'공사중',     e:'🏗️', bg:'#F0D060', c:200  },
+  {lv:7,  name:'오피스',     e:'🏢',  bg:'#6B8EC9', c:420  },
+  {lv:8,  name:'상업빌딩',   e:'🏬',  bg:'#9B7DD4', c:860  },
+  {lv:9,  name:'고층빌딩',   e:'🏙️', bg:'#4CACCA', c:1750 },
+  {lv:10, name:'성',         e:'🏰',  bg:'#E05555', c:3500 },
+  {lv:11, name:'타워',       e:'🗼',  bg:'#E8A020', c:7000 },
+  {lv:12, name:'왕국',       e:'👑',  bg:'#D4AF37', c:14000},
+];
+const MAX_LV = BLDGS.length;
+const COLS=5, ROWS=6, SIZE=COLS*ROWS;
+const REGEN_MS = 120_000; // 2 분
+
+const SHOP = [
+  {label:'🏕️ 텐트',      price:15,  act:'item',lv:1},
+  {label:'🛖 오두막',    price:40,  act:'item',lv:2},
+  {label:'🏠 작은집',    price:100, act:'item',lv:3},
+  {label:'🌳 나무 추가', price:80,  act:'gen'},
+];
+
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let S = {
+  grid: Array(SIZE).fill(null),
+  coins: 30, energy: 5, maxEnergy: 5,
+  maxLv: 1, lastEnergy: Date.now(),
+  sell: false,
+};
+
+// ═══════════════════════════════════════
+//  SAVE / LOAD
+// ═══════════════════════════════════════
+function save(){
+  localStorage.setItem('mt3', JSON.stringify({
+    grid:S.grid, coins:S.coins, energy:S.energy,
+    maxLv:S.maxLv, lastEnergy:S.lastEnergy
+  }));
+}
+function load(){
+  try{
+    const raw = localStorage.getItem('mt3');
+    if(!raw) return initNew();
+    const d = JSON.parse(raw);
+    S.grid       = d.grid ?? Array(SIZE).fill(null);
+    S.coins      = d.coins ?? 30;
+    S.energy     = d.energy ?? 5;
+    S.maxLv      = d.maxLv ?? 1;
+    S.lastEnergy = d.lastEnergy ?? Date.now();
+    // offline regen
+    const gained = Math.floor((Date.now()-S.lastEnergy)/REGEN_MS);
+    if(gained>0){
+      S.energy = Math.min(S.maxEnergy, S.energy+gained);
+      S.lastEnergy = Date.now();
+    }
+  }catch(e){ initNew(); }
+}
+function initNew(){
+  S.grid = Array(SIZE).fill(null);
+  S.grid[0] = {gen:true};
+  S.grid[1] = {gen:true};
+  S.grid[5] = {lv:1};
+  S.grid[6] = {lv:1};
+  S.coins=30; S.energy=5; S.maxLv=1; S.lastEnergy=Date.now();
+}
+
+// ═══════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════
+function render(){ renderGrid(); renderHUD(); renderEnergy(); }
+
+function renderGrid(){
+  const G = document.getElementById('grid');
+  if(G.children.length !== SIZE){
+    G.innerHTML='';
+    for(let i=0;i<SIZE;i++){
+      const c=document.createElement('div');
+      c.className='cell'; c.dataset.idx=i;
+      G.appendChild(c);
+    }
+    bindGrid();
+  }
+  for(let i=0;i<SIZE;i++){
+    const cell=G.children[i];
+    const item=S.grid[i];
+    cell.innerHTML='';
+    cell.className='cell'+(item?' filled':'');
+    if(!item) continue;
+
+    const card=document.createElement('div');
+    card.className='item'+(item.gen?' gen-item':'');
+    if(!item.gen) card.style.background=BLDGS[item.lv-1].bg+'55';
+
+    const emo=document.createElement('span');
+    emo.className='emo';
+    emo.textContent=item.gen?'🌳':BLDGS[item.lv-1].e;
+    card.appendChild(emo);
+
+    if(!item.gen){
+      const lv=document.createElement('span');
+      lv.className='lv'; lv.textContent=item.lv;
+      card.appendChild(lv);
+    }
+    cell.appendChild(card);
+  }
+}
+
+function renderHUD(){
+  document.getElementById('v-coins').textContent = S.coins.toLocaleString();
+  document.getElementById('v-maxlv').textContent = S.maxLv;
+  const pct = Math.round(((S.maxLv-1)/(MAX_LV-1))*100);
+  document.getElementById('prog-fill').style.width = pct+'%';
+}
+
+function renderEnergy(){
+  const row=document.getElementById('energy-row');
+  row.querySelectorAll('.e-pip').forEach(p=>p.remove());
+  for(let i=0;i<S.maxEnergy;i++){
+    const p=document.createElement('div');
+    p.className='e-pip'+(i<S.energy?' on':'');
+    row.appendChild(p);
+  }
+  const el=document.getElementById('v-timer');
+  if(S.energy>=S.maxEnergy){ el.textContent='FULL'; return; }
+  const rem=Math.max(0,REGEN_MS-(Date.now()-S.lastEnergy)%REGEN_MS);
+  const s=Math.ceil(rem/1000);
+  el.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+}
+
+// ═══════════════════════════════════════
+//  DRAG
+// ═══════════════════════════════════════
+let drag={on:false,from:-1,over:-1};
+
+function bindGrid(){
+  const G=document.getElementById('grid');
+  G.addEventListener('touchstart',onTS,{passive:false});
+  G.addEventListener('touchmove', onTM,{passive:false});
+  G.addEventListener('touchend',  onTE);
+  G.addEventListener('touchcancel',onTE);
+}
+
+function cellAt(x,y){
+  const el=document.elementFromPoint(x,y);
+  if(!el) return -1;
+  const c=el.closest?.('.cell');
+  if(!c) return -1;
+  return +c.dataset.idx;
+}
+
+function onTS(e){
+  e.preventDefault();
+  if(e.touches.length!==1) return;
+  const t=e.touches[0];
+  const idx=cellAt(t.clientX,t.clientY);
+  if(idx<0||!S.grid[idx]) return;
+  const item=S.grid[idx];
+
+  if(S.sell){ sellItem(idx); return; }
+  if(item.gen){ tapGen(idx); return; }
+
+  drag.on=true; drag.from=idx; drag.over=-1;
+
+  const g=document.getElementById('ghost');
+  g.textContent=BLDGS[item.lv-1].e;
+  g.style.background=BLDGS[item.lv-1].bg+'99';
+  g.style.display='flex';
+  g.style.left=(t.clientX-29)+'px';
+  g.style.top =(t.clientY-58)+'px';
+
+  document.querySelector(`[data-idx="${idx}"]`).classList.add('drag-src');
+}
+
+function onTM(e){
+  e.preventDefault();
+  if(!drag.on) return;
+  const t=e.touches[0];
+  const g=document.getElementById('ghost');
+  g.style.left=(t.clientX-29)+'px';
+  g.style.top =(t.clientY-58)+'px';
+
+  const ov=cellAt(t.clientX,t.clientY);
+  if(ov===drag.over) return;
+
+  if(drag.over>=0){
+    document.querySelector(`[data-idx="${drag.over}"]`)?.classList.remove('hl-merge','hl-move');
+  }
+  drag.over=ov;
+  if(ov>=0&&ov!==drag.from){
+    const to=S.grid[ov], fr=S.grid[drag.from];
+    const c=document.querySelector(`[data-idx="${ov}"]`);
+    if(c){
+      if(!to) c.classList.add('hl-move');
+      else if(!to.gen&&!fr.gen&&to.lv===fr.lv) c.classList.add('hl-merge');
+    }
+  }
+}
+
+function onTE(e){
+  if(!drag.on) return;
+  const t=e.changedTouches[0];
+  const to=cellAt(t.clientX,t.clientY);
+
+  document.getElementById('ghost').style.display='none';
+  document.querySelectorAll('.drag-src,.hl-merge,.hl-move')
+    .forEach(c=>c.classList.remove('drag-src','hl-merge','hl-move'));
+  drag.on=false;
+
+  if(to<0||to===drag.from) return;
+  const fr=S.grid[drag.from], toItem=S.grid[to];
+  if(!fr) return;
+
+  if(!toItem){
+    S.grid[to]=fr; S.grid[drag.from]=null;
+  } else if(!fr.gen&&!toItem.gen&&fr.lv===toItem.lv){
+    if(fr.lv>=MAX_LV){ toast('👑 이미 최고 레벨이에요!'); return; }
+    const nlv=fr.lv+1;
+    const earned=BLDGS[nlv-1].c;
+    S.grid[drag.from]=null;
+    S.grid[to]={lv:nlv};
+    S.coins+=earned;
+    if(nlv>S.maxLv) S.maxLv=nlv;
+    floatReward('+'+earned+'🪙', to);
+    popCell(to);
+    if(nlv===MAX_LV) setTimeout(()=>toast('🎉 왕국 완성! 최고 레벨 달성!'),350);
+    else if(nlv>S.maxLv-1) setTimeout(()=>toast('✨ '+BLDGS[nlv-1].name+' 완성!'),200);
+  }
+  render(); save();
+}
+
+// ═══════════════════════════════════════
+//  GENERATOR
+// ═══════════════════════════════════════
+function tapGen(idx){
+  if(S.energy<=0){ toast('⚡ 에너지가 없어요! 기다려주세요.'); return; }
+  const empty=firstEmpty();
+  if(empty<0){ toast('❗ 빈 칸이 없어요! 건물을 합쳐주세요.'); return; }
+  S.energy--;
+  S.grid[empty]={lv:1};
+  popCell(idx);
+  render(); save();
+}
+function firstEmpty(){
+  for(let i=0;i<SIZE;i++) if(!S.grid[i]) return i;
+  return -1;
+}
+
+// ═══════════════════════════════════════
+//  SELL
+// ═══════════════════════════════════════
+function toggleSell(){
+  S.sell=!S.sell;
+  const b=document.getElementById('btn-sell');
+  if(S.sell){
+    b.textContent='✅ 판매 취소'; b.classList.add('active');
+    toast('판매할 건물을 탭하세요 (40% 환급)');
+  } else {
+    b.textContent='💰 판매'; b.classList.remove('active');
+  }
+}
+function sellItem(idx){
+  const item=S.grid[idx];
+  if(!item||item.gen){ toast('나무는 판매할 수 없어요'); return; }
+  const price=Math.floor(BLDGS[item.lv-1].c*0.4);
+  S.grid[idx]=null;
+  S.coins+=price;
+  toast(BLDGS[item.lv-1].name+' 판매 +'+price+'🪙');
+  S.sell=false;
+  const b=document.getElementById('btn-sell');
+  b.textContent='💰 판매'; b.classList.remove('active');
+  render(); save();
+}
+
+// ═══════════════════════════════════════
+//  SHOP
+// ═══════════════════════════════════════
+function openShop(){
+  const list=document.getElementById('shop-list');
+  list.innerHTML='';
+  SHOP.forEach(it=>{
+    const b=document.createElement('button');
+    b.className='si-btn';
+    b.innerHTML=`<span>${it.label}</span><span class="si-price">${it.price}🪙</span>`;
+    b.addEventListener('click',()=>doBuy(it));
+    list.appendChild(b);
+  });
+  document.getElementById('overlay').classList.remove('hidden');
+}
+function closeShop(){ document.getElementById('overlay').classList.add('hidden'); }
+function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeShop(); }
+function doBuy(it){
+  if(S.coins<it.price){ toast('🪙 코인이 부족해요!'); return; }
+  const empty=firstEmpty();
+  if(empty<0){ toast('❗ 빈 칸이 없어요!'); return; }
+  S.coins-=it.price;
+  S.grid[empty]=it.act==='gen'?{gen:true}:{lv:it.lv};
+  closeShop(); render(); save();
+}
+
+// ═══════════════════════════════════════
+//  UI HELPERS
+// ═══════════════════════════════════════
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.remove('show'),2400);
+}
+function floatReward(txt,idx){
+  const c=document.querySelector(`[data-idx="${idx}"]`);
+  if(!c) return;
+  const r=c.getBoundingClientRect();
+  const el=document.createElement('div');
+  el.className='flt'; el.textContent=txt;
+  el.style.left=(r.left+r.width/2-18)+'px';
+  el.style.top =r.top+'px';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),950);
+}
+function popCell(idx){
+  const c=document.querySelector(`[data-idx="${idx}"]`);
+  if(!c) return;
+  c.classList.add('pop');
+  setTimeout(()=>c.classList.remove('pop'),380);
+}
+
+// ═══════════════════════════════════════
+//  ENERGY TICK
+// ═══════════════════════════════════════
+function tick(){
+  if(S.energy<S.maxEnergy){
+    const elapsed=Date.now()-S.lastEnergy;
+    if(elapsed>=REGEN_MS){
+      const gain=Math.floor(elapsed/REGEN_MS);
+      S.energy=Math.min(S.maxEnergy,S.energy+gain);
+      S.lastEnergy=Date.now();
+      save();
+    }
+  }
+  renderHUD(); renderEnergy();
+}
+
+// ═══════════════════════════════════════
+//  SERVICE WORKER
+// ═══════════════════════════════════════
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
+}
+
+// ═══════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════
+load();
+render();
+setInterval(tick,1000);
+</script>
+</body>
+</html>
