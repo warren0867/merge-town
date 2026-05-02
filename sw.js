@@ -1,4 +1,4 @@
-const CACHE = 'merge-town-v1';
+const CACHE = 'merge-restaurant-v1';
 const FILES = ['./', './index.html', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', e => {
