@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="마을머지">
-<meta name="theme-color" content="#1B5E20">
+<meta name="theme-color" content="#2E4A1E">
 <link rel="manifest" href="manifest.json">
 <title>마을 머지</title>
 <style>
@@ -14,283 +14,210 @@
 html,body{height:100%;overflow:hidden}
 body{
   font-family:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
-  background:linear-gradient(170deg,#42A5F5 0%,#66BB6A 50%,#2E7D32 100%);
+  background:linear-gradient(168deg,#4BA8E8 0%,#7EC87A 48%,#336620 100%);
   display:flex;flex-direction:column;align-items:center;
   height:100vh;height:100dvh;
 }
 
-/* ── HUD ── */
+/* ── TOP HUD ── */
 #hud{
   width:100%;max-width:460px;flex-shrink:0;
-  display:flex;justify-content:space-around;align-items:center;
-  padding:10px 10px 6px;gap:6px;
+  padding:10px 10px 0;display:flex;flex-direction:column;gap:5px;
 }
+#hud-top{display:flex;gap:5px}
 .hc{
-  background:rgba(0,0,0,0.35);backdrop-filter:blur(10px);
-  border-radius:20px;padding:7px 14px;
-  display:flex;align-items:center;gap:5px;
-  color:#fff;font-weight:700;font-size:14px;
-  flex:1;justify-content:center;min-width:0;
+  flex:1;background:rgba(0,0,0,.40);backdrop-filter:blur(12px);
+  border-radius:16px;padding:6px 10px;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  color:#fff;font-weight:700;font-size:13px;
 }
-.hc .val{font-size:15px}
+.hc.gem{border:1.5px solid rgba(200,120,255,.45)}
+.hc.pop{border:1.5px solid rgba(120,220,120,.35)}
+.gv{color:#CE93D8}.pv{color:#A5D6A7}
+/* energy row */
+#ebar-row{
+  background:rgba(0,0,0,.32);backdrop-filter:blur(8px);
+  border-radius:13px;padding:6px 12px;
+  display:flex;align-items:center;gap:8px;
+}
+.el{font-size:12px;color:#FFE082;font-weight:700;white-space:nowrap}
+#ebg{flex:1;height:10px;background:rgba(255,255,255,.18);border-radius:5px;overflow:hidden}
+#efg{height:100%;background:linear-gradient(90deg,#FFB300,#FFE066);border-radius:5px;transition:width .4s;box-shadow:0 0 6px rgba(255,180,0,.55)}
+#ecnt{font-size:12px;color:#FFE082;font-weight:700;white-space:nowrap}
+#etmr{font-size:11px;color:rgba(255,255,255,.5);white-space:nowrap;min-width:32px;text-align:right}
 
-/* ── QUEST BAR ── */
-#quest-bar{
-  width:100%;max-width:460px;flex-shrink:0;
-  padding:0 10px 6px;
+/* ── EVENT BANNER ── */
+#evt-wrap{width:100%;max-width:460px;flex-shrink:0;padding:0 10px}
+.evb{border-radius:11px;padding:6px 12px;margin-bottom:4px;
+  display:flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.2)}
+.evb .ei{font-size:17px;flex-shrink:0}
+.evb .en{font-size:12px;font-weight:800;color:#fff}
+.evb .ed{font-size:10px;color:rgba(255,255,255,.8)}
+.evb .et{font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+@keyframes eslide{from{transform:translateY(-35px);opacity:0}to{transform:translateY(0);opacity:1}}
+.eslide{animation:eslide .38s cubic-bezier(.34,1.4,.64,1)}
+
+/* ── ORDERS STRIP ── */
+#orders-wrap{
+  width:100%;max-width:460px;flex-shrink:0;padding:0 10px 4px;
 }
-.qb-inner{
-  background:rgba(0,0,0,0.28);backdrop-filter:blur(8px);
-  border-radius:14px;padding:8px 12px;
-  display:flex;align-items:center;justify-content:space-between;gap:8px;
-  border:1px solid rgba(255,255,255,0.15);
+#orders-inner{display:flex;gap:7px}
+.ord{
+  flex:1;background:linear-gradient(145deg,#FFF8DC,#FFE8A0);
+  border:2px solid #D4A020;border-radius:14px;padding:6px 6px 7px;
+  text-align:center;position:relative;min-width:0;
 }
-.q-icon{font-size:16px;flex-shrink:0}
-.q-text{color:#FFF9C4;font-size:12px;font-weight:600;flex:1;line-height:1.3}
-.q-reward{color:#FFD700;font-size:11px;font-weight:700;flex-shrink:0}
-#q-claim{
-  background:linear-gradient(135deg,#FFD700,#FF8C00);
-  border:none;border-radius:10px;padding:5px 10px;
-  color:#fff;font-size:12px;font-weight:800;cursor:pointer;
-  box-shadow:0 2px 8px rgba(255,140,0,0.5);flex-shrink:0;
-  display:none;
+.ord .char{font-size:20px;line-height:1}
+.ord .bname{font-size:9px;color:#888;font-weight:600;margin:2px 0 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ord .bemo{font-size:22px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+.ord .rwd{font-size:9px;font-weight:700;color:#D4820A;margin:2px 0;line-height:1.4}
+.ord .dbtn{
+  width:100%;border:none;border-radius:8px;padding:4px 0;
+  font-size:10px;font-weight:800;cursor:pointer;color:#fff;
+}
+.ord .dbtn.ready{background:linear-gradient(135deg,#4CAF50,#2E7D32);box-shadow:0 2px 6px rgba(46,125,50,.4)}
+.ord .dbtn.noready{background:#C0C0C0;color:#888;cursor:default}
+.ord .lv-tag{
+  position:absolute;top:4px;right:5px;
+  font-size:9px;font-weight:800;color:#fff;
+  background:rgba(0,0,0,.4);border-radius:5px;padding:1px 4px;
 }
 
-/* ── GRID WRAP ── */
-#grid-wrap{
-  width:100%;max-width:460px;flex:1;
+/* ── GRID ── */
+#gwrap{
+  width:100%;max-width:460px;flex:1;min-height:0;
   display:flex;align-items:center;justify-content:center;
-  padding:4px 10px;min-height:0;
+  padding:2px 10px;
 }
 #grid{
   display:grid;grid-template-columns:repeat(5,1fr);
-  gap:5px;padding:10px;
-  background:rgba(80,45,15,0.7);
-  border-radius:20px;
-  border:3px solid #6D3B1A;
-  box-shadow:0 8px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.1);
-  width:100%;
+  gap:5px;padding:9px;width:100%;
+  background:rgba(50,22,4,.72);
+  border-radius:20px;border:3px solid #5C2C08;
+  box-shadow:0 8px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08);
 }
-
-/* ── CELL ── */
 .cell{
-  aspect-ratio:1;background:rgba(255,255,255,0.12);
+  aspect-ratio:1;background:rgba(255,255,255,.08);
   border-radius:11px;display:flex;align-items:center;justify-content:center;
-  position:relative;border:1.5px solid rgba(255,255,255,0.08);
+  position:relative;border:1.5px solid rgba(255,255,255,.06);
   transition:border-color .12s,background .12s;overflow:hidden;
 }
-.cell.filled{background:rgba(255,255,255,0.2)}
-.cell.hl-merge{
-  border-color:#FFD700!important;
-  background:rgba(255,215,0,.3)!important;
-  box-shadow:0 0 14px rgba(255,215,0,.7)!important;
-}
-.cell.hl-move{border-color:#A5D6A7!important;background:rgba(165,214,167,.2)!important}
-.cell.drag-src{opacity:.3}
+.cell.filled{background:rgba(255,255,255,.16)}
+.cell.hl-merge{border-color:#FFD700!important;background:rgba(255,215,0,.24)!important;box-shadow:0 0 16px rgba(255,215,0,.7)!important}
+.cell.hl-move{border-color:#A5D6A7!important;background:rgba(165,214,167,.15)!important}
+.cell.drag-src{opacity:.25}
 
-/* ── ITEM ── */
+/* ── ITEM CARD ── */
 .item{
-  width:92%;height:92%;border-radius:9px;
+  width:90%;height:90%;border-radius:9px;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  position:relative;
-  background:rgba(255,255,255,0.08);
+  position:relative;overflow:hidden;
 }
-.item .emo{font-size:1.85em;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))}
-.item .nm{
-  font-size:8px;font-weight:700;color:rgba(255,255,255,.85);
-  margin-top:2px;line-height:1;text-shadow:0 1px 2px rgba(0,0,0,.8);
+.item .emo{font-size:1.82em;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));z-index:1}
+.item .nm{font-size:8px;font-weight:700;color:rgba(255,255,255,.85);margin-top:2px;line-height:1;text-shadow:0 1px 3px rgba(0,0,0,.8);z-index:1}
+.item .lv{position:absolute;bottom:2px;right:3px;font-size:9px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,1);background:rgba(0,0,0,.55);border-radius:4px;padding:1px 3px;z-index:2}
+/* tiers */
+.t1{border:2px solid #C87430;box-shadow:inset 0 0 8px rgba(200,116,48,.2)}
+.t2{border:2px solid #8AA8C0;box-shadow:inset 0 0 10px rgba(138,168,192,.25),0 0 5px rgba(138,168,192,.2)}
+.t3{border:2px solid #FFD700;animation:gglow 2s ease infinite}
+@keyframes gglow{0%,100%{box-shadow:inset 0 0 10px rgba(255,215,0,.25),0 0 8px rgba(255,215,0,.3)}50%{box-shadow:inset 0 0 16px rgba(255,215,0,.5),0 0 14px rgba(255,215,0,.5)}}
+.t4{border:2px solid #FF6B6B;animation:rbdr 1.5s linear infinite}
+@keyframes rbdr{
+  0%  {border-color:#FF6B6B;box-shadow:inset 0 0 14px rgba(255,107,107,.28),0 0 12px rgba(255,107,107,.42)}
+  25% {border-color:#FFD700;box-shadow:inset 0 0 14px rgba(255,215,0,.28),0 0 12px rgba(255,215,0,.42)}
+  50% {border-color:#4ECDC4;box-shadow:inset 0 0 14px rgba(78,205,196,.28),0 0 12px rgba(78,205,196,.42)}
+  75% {border-color:#C084FC;box-shadow:inset 0 0 14px rgba(192,132,252,.28),0 0 12px rgba(192,132,252,.42)}
+  100%{border-color:#FF6B6B;box-shadow:inset 0 0 14px rgba(255,107,107,.28),0 0 12px rgba(255,107,107,.42)}
 }
-.item .lv{
-  position:absolute;bottom:2px;right:3px;
-  font-size:9px;font-weight:800;color:#fff;
-  text-shadow:0 1px 3px rgba(0,0,0,.9);
-  background:rgba(0,0,0,.5);border-radius:4px;padding:1px 3px;
-}
-.gen-item{background:rgba(27,94,32,.4)!important;border:1.5px solid rgba(100,200,80,.5)!important;border-radius:9px}
-
-/* pop + shine animation */
-@keyframes popAnim{0%{transform:scale(1)}40%{transform:scale(1.4)}100%{transform:scale(1)}}
-.pop .item{animation:popAnim .35s cubic-bezier(.36,.07,.19,.97)}
-
-@keyframes shineAnim{0%{left:-100%}100%{left:200%}}
-.item::after{
-  content:'';position:absolute;top:0;left:-100%;
-  width:60%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
-  transform:skewX(-20deg);pointer-events:none;
-}
-.item.shining::after{animation:shineAnim .5s ease}
-
-/* particle */
-@keyframes ptcl{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
-.ptcl{position:fixed;border-radius:50%;pointer-events:none;z-index:600;animation:ptcl .7s ease forwards}
+.gen-item{background:rgba(20,80,20,.45)!important;border:2px solid rgba(80,180,60,.45)!important}
+/* animations */
+@keyframes popA{0%{transform:scale(1)}42%{transform:scale(1.44)}100%{transform:scale(1)}}
+.pop .item{animation:popA .34s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shA{0%{left:-120%}100%{left:220%}}
+.item::before{content:'';position:absolute;top:0;left:-120%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg);pointer-events:none;z-index:3}
+.item.sh::before{animation:shA .5s ease}
+/* deliver flash on matching cell */
+@keyframes matchPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 3px #4CAF50}}
+.cell.match{animation:matchPulse 1s ease infinite}
 
 /* ── BOTTOM ── */
-#bottom{
-  width:100%;max-width:460px;flex-shrink:0;
-  padding:4px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;
-}
-#e-row{display:flex;align-items:center;gap:5px;flex-wrap:nowrap}
-.e-label{font-size:11px;color:rgba(255,255,255,.8);font-weight:700;white-space:nowrap}
-.e-pip{
-  width:18px;height:18px;border-radius:50%;
-  background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.28);
-  transition:background .25s,border-color .25s,transform .1s;flex-shrink:0;
-}
-.e-pip.on{
-  background:linear-gradient(135deg,#FFE066,#FFB300);
-  border-color:#FF8F00;
-  box-shadow:0 0 5px rgba(255,180,0,.7);
-  transform:scale(1.08);
-}
-#e-timer{font-size:11px;color:rgba(255,255,255,.7);font-weight:700;margin-left:2px;white-space:nowrap}
-#btn-row{display:flex;gap:8px;width:100%}
-.btn{
-  flex:1;padding:11px 0;border:none;border-radius:24px;
-  font-size:14px;font-weight:800;color:#fff;cursor:pointer;
-  box-shadow:0 3px 12px rgba(0,0,0,.25);letter-spacing:-.3px;
-}
-#btn-shop{background:linear-gradient(135deg,#FF8C00,#FFD700)}
-#btn-sell{background:linear-gradient(135deg,#C0392B,#E74C3C)}
-#btn-sell.active{background:linear-gradient(135deg,#1B5E20,#27AE60)}
+#bottom{width:100%;max-width:460px;flex-shrink:0;padding:4px 10px 10px;display:flex;gap:8px}
+.btn{flex:1;padding:12px 0;border:none;border-radius:24px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.25)}
+#bshop{background:linear-gradient(135deg,#FF8C00,#FFD700)}
+#bsell{background:linear-gradient(135deg,#C0392B,#E74C3C)}
+#bsell.active{background:linear-gradient(135deg,#1B5E20,#27AE60)}
 
 /* ── GHOST ── */
-#ghost{
-  position:fixed;pointer-events:none;z-index:500;
-  width:60px;height:60px;border-radius:12px;
-  align-items:center;justify-content:center;
-  font-size:2em;filter:drop-shadow(0 6px 12px rgba(0,0,0,.6));
-  transform:scale(1.25);display:none;
-}
+#ghost{position:fixed;pointer-events:none;z-index:600;width:56px;height:56px;border-radius:11px;align-items:center;justify-content:center;font-size:1.9em;filter:drop-shadow(0 6px 12px rgba(0,0,0,.6));transform:scale(1.26);display:none}
 
-/* ── SHOP OVERLAY ── */
-#shop-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.55);
-  z-index:800;display:flex;align-items:flex-end;justify-content:center;
-}
-#shop-overlay.hidden{display:none!important}
-.sheet{
-  width:100%;max-width:460px;background:#FFFBF2;
-  border-radius:24px 24px 0 0;padding:20px 14px 30px;
-  max-height:75vh;overflow-y:auto;
-}
-.sheet-hd{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:14px;
-}
-.sheet-title{font-size:18px;font-weight:900;color:#333}
-.sheet-coins{font-size:14px;font-weight:700;color:#E67E22}
-.si{
-  display:flex;align-items:center;gap:10px;
-  width:100%;padding:11px 14px;margin-bottom:8px;
-  border-radius:14px;border:2px solid #EAE0D0;background:#fff;
-  cursor:pointer;text-align:left;
-}
+/* ── PARTICLES ── */
+@keyframes pt{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+.pt{position:fixed;border-radius:50%;pointer-events:none;z-index:700;animation:pt .72s ease forwards}
+
+/* ── SHOP ── */
+#shop-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:800;display:flex;align-items:flex-end;justify-content:center}
+#shop-ov.hidden{display:none!important}
+.sheet{width:100%;max-width:460px;background:#FFFBF2;border-radius:24px 24px 0 0;padding:18px 14px 28px;max-height:78vh;overflow-y:auto}
+.shd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.stitle{font-size:18px;font-weight:900;color:#333}
+.sbal{display:flex;gap:10px;font-size:13px;font-weight:700}
+.sc{color:#E67E22}.sg{color:#8E44AD}
+#stabs{display:flex;gap:6px;margin-bottom:11px}
+.stab{flex:1;padding:8px;border:2px solid #E0D5C8;border-radius:12px;background:#fff;font-size:13px;font-weight:700;cursor:pointer;color:#666}
+.stab.on{background:linear-gradient(135deg,#FF8C00,#FFD700);border-color:transparent;color:#fff}
+.stab.gtab.on{background:linear-gradient(135deg,#6A1B9A,#CE93D8)}
+.si{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;margin-bottom:7px;border-radius:14px;border:2px solid #EAE0D0;background:#fff;cursor:pointer;text-align:left}
 .si:active{background:#FAF3E8}
-.si-emo{font-size:22px;flex-shrink:0}
-.si-info{flex:1;display:flex;flex-direction:column;gap:2px}
-.si-name{font-size:14px;font-weight:800;color:#333}
-.si-desc{font-size:11px;color:#888}
-.si-price{font-weight:800;color:#E67E22;white-space:nowrap;font-size:14px}
-.sheet-close{
-  width:100%;padding:12px;border:none;border-radius:14px;
-  background:#E0D5C8;font-size:16px;font-weight:700;cursor:pointer;
-  margin-top:6px;color:#666;
-}
+.si.gi{border-color:#E8D4F0;background:#FAF0FF}
+.si.gi:active{background:#F0E0FF}
+.sico{font-size:22px;flex-shrink:0}
+.sinfo{flex:1;display:flex;flex-direction:column;gap:1px}
+.sname{font-size:13px;font-weight:800;color:#333}
+.sdesc{font-size:11px;color:#888}
+.sprice{font-weight:800;white-space:nowrap;font-size:13px}
+.pc{color:#E67E22}.pg{color:#8E44AD}
+#freebtn{width:100%;padding:11px;border:2px dashed #9B59B6;border-radius:14px;background:#FAF0FF;font-size:13px;font-weight:800;color:#7D3C98;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:7px}
+#freebtn:disabled{opacity:.45;cursor:default}
+.sclose{width:100%;padding:12px;border:none;border-radius:14px;background:#E0D5C8;font-size:16px;font-weight:700;cursor:pointer;margin-top:4px;color:#666}
 
-/* ── NEW BUILDING POPUP ── */
-#new-bldg{
-  position:fixed;inset:0;z-index:900;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.6);
-}
-#new-bldg.hidden{display:none!important}
-@keyframes popupIn{0%{transform:scale(.5) translateY(40px);opacity:0}70%{transform:scale(1.06) translateY(-5px);opacity:1}100%{transform:scale(1) translateY(0);opacity:1}}
-.nb-card{
-  background:linear-gradient(145deg,#FFFDE7,#FFF9C4);
-  border-radius:28px;padding:30px 24px;
-  text-align:center;max-width:260px;width:85%;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
-  animation:popupIn .45s cubic-bezier(.34,1.56,.64,1) forwards;
-  border:3px solid #FFD700;
-}
-.nb-tag{
-  background:linear-gradient(135deg,#FF8C00,#FFD700);
-  color:#fff;font-size:11px;font-weight:900;
-  border-radius:20px;padding:4px 14px;display:inline-block;
-  margin-bottom:12px;letter-spacing:.5px;
-}
-.nb-emo{font-size:72px;line-height:1;margin:4px 0 8px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
-.nb-name{font-size:22px;font-weight:900;color:#333;margin-bottom:4px}
-.nb-lv{font-size:13px;color:#888;margin-bottom:18px}
-.nb-btn{
-  background:linear-gradient(135deg,#FFD700,#FF8C00);
-  border:none;border-radius:20px;padding:12px 32px;
-  color:#fff;font-size:16px;font-weight:900;cursor:pointer;
-  box-shadow:0 4px 15px rgba(255,140,0,.5);width:100%;
-}
-
-/* ── DAILY BONUS ── */
-#daily-overlay{
-  position:fixed;inset:0;z-index:900;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.6);
-}
-#daily-overlay.hidden{display:none!important}
-.daily-card{
-  background:linear-gradient(145deg,#E8F5E9,#C8E6C9);
-  border-radius:28px;padding:28px 24px;
-  text-align:center;max-width:260px;width:85%;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
-  animation:popupIn .45s cubic-bezier(.34,1.56,.64,1) forwards;
-  border:3px solid #4CAF50;
-}
-.daily-title{font-size:18px;font-weight:900;color:#1B5E20;margin-bottom:8px}
-.daily-sub{font-size:13px;color:#388E3C;margin-bottom:16px}
-.daily-reward{font-size:28px;font-weight:900;color:#E65100;margin-bottom:16px}
-.daily-btn{
-  background:linear-gradient(135deg,#4CAF50,#2E7D32);
-  border:none;border-radius:20px;padding:12px 32px;
-  color:#fff;font-size:16px;font-weight:900;cursor:pointer;
-  box-shadow:0 4px 15px rgba(46,125,50,.4);width:100%;
-}
+/* ── POPUPS ── */
+.pov{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.62)}
+.pov.hidden{display:none!important}
+@keyframes ppin{0%{transform:scale(.45) translateY(25px);opacity:0}70%{transform:scale(1.05) translateY(-3px)}100%{transform:scale(1) translateY(0);opacity:1}}
+/* new building */
+.nbc{background:linear-gradient(145deg,#FFFDE7,#FFF9C4);border-radius:28px;padding:26px 22px;text-align:center;max-width:270px;width:86%;box-shadow:0 20px 60px rgba(0,0,0,.55);animation:ppin .44s cubic-bezier(.34,1.56,.64,1);border:3px solid #FFD700}
+.nbtag{background:linear-gradient(135deg,#FF8C00,#FFD700);color:#fff;font-size:11px;font-weight:900;border-radius:20px;padding:4px 14px;display:inline-block;margin-bottom:10px}
+.nbemo{font-size:68px;line-height:1;margin:4px 0 6px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
+.nbname{font-size:22px;font-weight:900;color:#333;margin-bottom:3px}
+.nblv{font-size:13px;color:#888;margin-bottom:16px}
+.nbbtn{background:linear-gradient(135deg,#FFD700,#FF8C00);border:none;border-radius:20px;padding:12px;color:#fff;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(255,140,0,.5);width:100%}
+/* daily */
+.dcard{background:linear-gradient(145deg,#E8F5E9,#C8E6C9);border-radius:28px;padding:26px 22px;text-align:center;max-width:270px;width:86%;box-shadow:0 20px 60px rgba(0,0,0,.55);animation:ppin .44s cubic-bezier(.34,1.56,.64,1);border:3px solid #4CAF50}
+.dtitle{font-size:20px;font-weight:900;color:#1B5E20;margin-bottom:5px}
+.dsub{font-size:13px;color:#388E3C;margin-bottom:13px}
+.drwd{font-size:22px;font-weight:900;color:#E65100;margin-bottom:16px;line-height:1.6}
+.dbtn{background:linear-gradient(135deg,#4CAF50,#2E7D32);border:none;border-radius:20px;padding:12px;color:#fff;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(46,125,50,.4);width:100%}
+/* event popup */
+.ecard{background:linear-gradient(145deg,#FFF8E1,#FFF3CD);border-radius:24px;padding:22px;text-align:center;max-width:270px;width:86%;box-shadow:0 20px 60px rgba(0,0,0,.55);animation:ppin .4s cubic-bezier(.34,1.56,.64,1)}
+.eico2{font-size:56px;margin-bottom:6px}
+.ename{font-size:20px;font-weight:900;color:#333;margin-bottom:5px}
+.edesc{font-size:13px;color:#555;margin-bottom:4px}
+.edur{font-size:11px;color:#999;margin-bottom:14px}
+.eok{background:linear-gradient(135deg,#FF8C00,#FFD700);border:none;border-radius:20px;padding:12px;color:#fff;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(255,140,0,.5);width:100%}
 
 /* ── COMBO ── */
-@keyframes comboIn{0%{transform:translateX(-50%) scale(.5);opacity:0}60%{transform:translateX(-50%) scale(1.15);opacity:1}100%{transform:translateX(-50%) scale(1);opacity:1}}
-@keyframes comboOut{to{transform:translateX(-50%) scale(.8) translateY(-20px);opacity:0}}
-#combo-pop{
-  position:fixed;top:100px;left:50%;transform:translateX(-50%);
-  background:linear-gradient(135deg,#FF6B35,#FFD700);
-  color:#fff;font-size:16px;font-weight:900;
-  border-radius:30px;padding:8px 22px;
-  box-shadow:0 4px 20px rgba(255,107,53,.6);
-  z-index:700;pointer-events:none;white-space:nowrap;
-  display:none;letter-spacing:.5px;
-}
+@keyframes cin{0%{transform:translateX(-50%) scale(.35);opacity:0}65%{transform:translateX(-50%) scale(1.15)}100%{transform:translateX(-50%) scale(1);opacity:1}}
+@keyframes cout{to{transform:translateX(-50%) scale(.7) translateY(-12px);opacity:0}}
+#cpop{position:fixed;top:108px;left:50%;transform:translateX(-50%);color:#fff;font-size:15px;font-weight:900;border-radius:30px;padding:8px 22px;z-index:700;pointer-events:none;white-space:nowrap;display:none}
 
 /* ── TOAST ── */
-#toast{
-  position:fixed;bottom:120px;left:50%;transform:translateX(-50%);
-  background:rgba(20,20,20,.88);color:#fff;
-  padding:10px 20px;border-radius:24px;font-size:13px;
-  z-index:950;white-space:nowrap;pointer-events:none;
-  opacity:0;transition:opacity .25s;max-width:88%;text-align:center;
-}
+#toast{position:fixed;bottom:106px;left:50%;transform:translateX(-50%);background:rgba(12,12,12,.88);color:#fff;padding:10px 20px;border-radius:24px;font-size:13px;z-index:950;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .25s;max-width:90%;text-align:center}
 #toast.show{opacity:1}
 
-/* ── FLOAT REWARD ── */
-.flt{
-  position:fixed;pointer-events:none;
-  font-size:17px;font-weight:900;
-  text-shadow:0 2px 4px rgba(0,0,0,.7);z-index:600;
-  animation:flyUp .85s ease forwards;
-}
-@keyframes flyUp{
-  0%  {opacity:1;transform:translateY(0) scale(1)}
-  55% {opacity:1;transform:translateY(-36px) scale(1.2)}
-  100%{opacity:0;transform:translateY(-62px) scale(.9)}
-}
+/* ── FLOAT ── */
+.flt{position:fixed;pointer-events:none;font-size:16px;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.7);z-index:650;animation:fup .88s ease forwards}
+@keyframes fup{0%{opacity:1;transform:translateY(0) scale(1)}55%{opacity:1;transform:translateY(-32px) scale(1.2)}100%{opacity:0;transform:translateY(-56px) scale(.9)}}
 
 .hidden{display:none!important}
 </style>
@@ -299,630 +226,642 @@ body{
 
 <!-- HUD -->
 <div id="hud">
-  <div class="hc">🪙 <span class="val" id="v-coins">0</span></div>
-  <div class="hc">⚡ <span class="val" id="v-e">20</span><span style="opacity:.6;font-size:12px">/20</span></div>
-  <div class="hc">🏆 <span class="val">Lv.</span><span class="val" id="v-maxlv">1</span></div>
+  <div id="hud-top">
+    <div class="hc">🪙 <span id="vcoin">0</span></div>
+    <div class="hc gem">💎 <span id="vgem" class="gv">0</span></div>
+    <div class="hc pop">🏘️ <span id="vpop" class="pv">0</span></div>
+  </div>
+  <div id="ebar-row">
+    <span class="el">⚡</span>
+    <div id="ebg"><div id="efg" style="width:100%"></div></div>
+    <span id="ecnt">20/20</span>
+    <span id="etmr"></span>
+  </div>
 </div>
 
-<!-- Quest Bar -->
-<div id="quest-bar">
-  <div class="qb-inner">
-    <span class="q-icon">🎯</span>
-    <span class="q-text" id="q-text">오두막을 만들어보세요!</span>
-    <span class="q-reward" id="q-reward">+30🪙</span>
-    <button id="q-claim" onclick="claimQuest()">받기!</button>
-  </div>
+<!-- Event banner -->
+<div id="evt-wrap"></div>
+
+<!-- Orders -->
+<div id="orders-wrap">
+  <div id="orders-inner"></div>
 </div>
 
 <!-- Grid -->
-<div id="grid-wrap"><div id="grid"></div></div>
+<div id="gwrap"><div id="grid"></div></div>
 
 <!-- Bottom -->
 <div id="bottom">
-  <div id="e-row">
-    <span class="e-label">⚡에너지</span>
-    <span id="e-timer"></span>
-  </div>
-  <div id="btn-row">
-    <button class="btn" id="btn-shop" onclick="openShop()">🏪 상점</button>
-    <button class="btn" id="btn-sell" onclick="toggleSell()">💰 판매</button>
-  </div>
+  <button class="btn" id="bshop" onclick="openShop()">🏪 상점</button>
+  <button class="btn" id="bsell" onclick="toggleSell()">💰 판매</button>
 </div>
 
 <!-- Ghost -->
 <div id="ghost"></div>
 
 <!-- Shop -->
-<div id="shop-overlay" class="hidden" onclick="overlayBg(event)">
+<div id="shop-ov" class="hidden" onclick="shopBg(event)">
   <div class="sheet">
-    <div class="sheet-hd">
-      <span class="sheet-title">🏪 상점</span>
-      <span class="sheet-coins">보유: <span id="shop-coins">0</span>🪙</span>
+    <div class="shd">
+      <span class="stitle">🏪 상점</span>
+      <span class="sbal"><span class="sc">🪙 <span id="shcoin">0</span></span><span class="sg">💎 <span id="shgem">0</span></span></span>
     </div>
-    <div id="shop-list"></div>
-    <button class="sheet-close" onclick="closeShop()">닫기</button>
+    <div id="stabs">
+      <button class="stab on" onclick="switchTab('coin')">🪙 코인</button>
+      <button class="stab gtab" onclick="switchTab('gem')">💎 보석</button>
+    </div>
+    <div id="slist"></div>
+    <button class="sclose" onclick="closeShop()">닫기</button>
   </div>
 </div>
 
-<!-- New Building Popup -->
-<div id="new-bldg" class="hidden">
-  <div class="nb-card">
-    <div class="nb-tag">✨ 새 건물 발견!</div>
-    <div class="nb-emo" id="nb-emo">🏠</div>
-    <div class="nb-name" id="nb-name">작은집</div>
-    <div class="nb-lv" id="nb-lv">레벨 3</div>
-    <button class="nb-btn" onclick="closeNewBldg()">멋져요!</button>
+<!-- New Building -->
+<div id="nb-ov" class="pov hidden">
+  <div class="nbc">
+    <div class="nbtag">✨ 새 건물 발견!</div>
+    <div class="nbemo" id="nbemo">🏠</div>
+    <div class="nbname" id="nbname">작은집</div>
+    <div class="nblv" id="nblv">레벨 3 · 실버</div>
+    <button class="nbbtn" onclick="closeNb()">계속 건설하기!</button>
   </div>
 </div>
 
-<!-- Daily Bonus -->
-<div id="daily-overlay" class="hidden">
-  <div class="daily-card">
-    <div class="daily-title">🌅 일일 보너스!</div>
-    <div class="daily-sub">오늘도 마을 건설 화이팅!</div>
-    <div class="daily-reward" id="daily-reward">+200🪙 +10⚡</div>
-    <button class="daily-btn" onclick="claimDaily()">받기!</button>
+<!-- Daily -->
+<div id="daily-ov" class="pov hidden">
+  <div class="dcard">
+    <div class="dtitle">🌅 일일 보너스!</div>
+    <div class="dsub">오늘도 마을 건설 화이팅!</div>
+    <div class="drwd" id="drwd"></div>
+    <button class="dbtn" onclick="claimDaily()">받기! 🎉</button>
   </div>
 </div>
 
-<!-- Combo popup -->
-<div id="combo-pop">🔥 COMBO!</div>
+<!-- Event popup -->
+<div id="evt-ov" class="pov hidden">
+  <div class="ecard">
+    <div class="eico2" id="eico">🌟</div>
+    <div class="ename" id="ename">황금 시간!</div>
+    <div class="edesc" id="edesc">모든 머지 코인 2배!</div>
+    <div class="edur" id="edur">3분 지속</div>
+    <button class="eok" onclick="closeEvtPop()">지금 시작!</button>
+  </div>
+</div>
 
-<!-- Toast -->
+<div id="cpop"></div>
 <div id="toast"></div>
 
 <script>
 'use strict';
 
-// ═══════════════ DATA ═══════════════
-const BLDGS = [
-  {lv:1,  name:'텐트',        e:'🏕️',  bg:'#C8A46A',  gc:'#D4B07A,#C08050', c:3    },
-  {lv:2,  name:'오두막',      e:'🛖',   bg:'#9A6040',  gc:'#B07850,#8A5030', c:8    },
-  {lv:3,  name:'작은집',      e:'🏠',   bg:'#4A94CF',  gc:'#60A8E0,#3880B8', c:20   },
-  {lv:4,  name:'잔디집',      e:'🏡',   bg:'#52A85C',  gc:'#6ABE74,#3D8E48', c:45   },
-  {lv:5,  name:'타운하우스',  e:'🏘️',  bg:'#E87030',  gc:'#F08C48,#D05818', c:95   },
-  {lv:6,  name:'공사중',      e:'🏗️',  bg:'#D4B020',  gc:'#EAC830,#BCA010', c:200  },
-  {lv:7,  name:'오피스',      e:'🏢',   bg:'#4878C0',  gc:'#608CD4,#3060A8', c:420  },
-  {lv:8,  name:'상업빌딩',    e:'🏬',   bg:'#7050C8',  gc:'#8868DC,#5838B0', c:860  },
-  {lv:9,  name:'고층빌딩',    e:'🏙️',  bg:'#2898C0',  gc:'#40ACDC,#1880A8', c:1750 },
-  {lv:10, name:'성',          e:'🏰',   bg:'#C03030',  gc:'#D84848,#A01818', c:3500 },
-  {lv:11, name:'타워',        e:'🗼',   bg:'#C07018',  gc:'#D88830,#A85800', c:7000 },
-  {lv:12, name:'왕국',        e:'👑',   bg:'#B09010',  gc:'#D0B030,#907800', c:14000},
+// ════════ DATA ════════
+const BLDGS=[
+  {lv:1, n:'텐트',       e:'🏕️', g:'#D4A86A,#B07840', t:1, c:3    },
+  {lv:2, n:'오두막',     e:'🛖',  g:'#B07850,#8A5030', t:1, c:8    },
+  {lv:3, n:'작은집',     e:'🏠',  g:'#5BA4CF,#3880B8', t:1, c:20   },
+  {lv:4, n:'잔디집',     e:'🏡',  g:'#52A85C,#3D8E48', t:2, c:45   },
+  {lv:5, n:'타운하우스', e:'🏘️', g:'#E87030,#C05010', t:2, c:95   },
+  {lv:6, n:'공사중',     e:'🏗️', g:'#D4B020,#A88A10', t:2, c:200  },
+  {lv:7, n:'오피스',     e:'🏢',  g:'#4878C0,#2858A0', t:3, c:420  },
+  {lv:8, n:'상업빌딩',   e:'🏬',  g:'#7050C8,#5030A8', t:3, c:860  },
+  {lv:9, n:'고층빌딩',   e:'🏙️', g:'#2898C0,#1878A0', t:3, c:1750 },
+  {lv:10,n:'성',         e:'🏰',  g:'#C03030,#900A0A', t:4, c:3500 },
+  {lv:11,n:'타워',       e:'🗼',  g:'#C07018,#904A00', t:4, c:7000 },
+  {lv:12,n:'왕국',       e:'👑',  g:'#B09010,#806800', t:4, c:14000},
 ];
-const MAX_LV = BLDGS.length;
-const COLS = 5, ROWS = 7, SIZE = COLS * ROWS;
-const REGEN_MS  = 30_000;  // 30초
-const MAX_ENERGY = 20;
+const TIER_NAME=['','브론즈','실버','골드','다이아'];
+const MAX_LV=12,COLS=5,ROWS=7,SIZE=35;
+const REGEN_MS=30000,MAX_E=20;
 
-const QUESTS = [
-  {lv:2,  desc:'오두막을 만들어보세요',     rc:30,   re:0 },
-  {lv:3,  desc:'작은집을 만들어보세요',     rc:60,   re:0 },
-  {lv:4,  desc:'잔디집을 만들어보세요',     rc:120,  re:5 },
-  {lv:5,  desc:'타운하우스를 완성하세요',   rc:250,  re:5 },
-  {lv:6,  desc:'공사중 건물을 달성하세요',  rc:500,  re:8 },
-  {lv:7,  desc:'오피스를 건설하세요',       rc:1000, re:10},
-  {lv:8,  desc:'상업빌딩을 완성하세요',     rc:2000, re:10},
-  {lv:9,  desc:'고층빌딩을 지어보세요',     rc:4000, re:15},
-  {lv:10, desc:'성을 건설하세요',           rc:8000, re:15},
-  {lv:11, desc:'타워를 완성하세요',         rc:15000,re:20},
-  {lv:12, desc:'왕국을 완성하세요! 🎉',     rc:30000,re:30},
+const CHARS=[
+  {f:'👴',n:'김 할아버지'},{f:'👵',n:'이 할머니'},{f:'👨',n:'박 아저씨'},
+  {f:'👩',n:'최 아줌마'},{f:'👦',n:'정 소년'},{f:'👧',n:'강 소녀'},
+  {f:'🧑',n:'조씨'},{f:'👮',n:'경찰관'},{f:'👷',n:'건축가'},
+  {f:'🧑‍🍳',n:'요리사'},{f:'🧑‍🏫',n:'선생님'},{f:'🧙',n:'마법사'},
 ];
 
-const SHOP_ITEMS = [
-  {emo:'🏕️',name:'텐트',       desc:'레벨1 건물',      price:15,  act:'item',lv:1},
-  {emo:'🛖', name:'오두막',     desc:'레벨2 건물',      price:40,  act:'item',lv:2},
-  {emo:'🏠', name:'작은집',     desc:'레벨3 건물',      price:100, act:'item',lv:3},
-  {emo:'🎁', name:'미스터리 상자',desc:'Lv1~4 랜덤 건물', price:60, act:'box' },
-  {emo:'🌳', name:'나무 추가',   desc:'생성기 하나 더',  price:80,  act:'gen' },
-  {emo:'⚡', name:'에너지 +10', desc:'즉시 10 충전',    price:80,  act:'energy',val:10},
+const EVENTS=[
+  {id:'gold', ico:'🌟',n:'황금 시간!',   d:'코인 2배로 획득!',         dur:180,col:'linear-gradient(135deg,#FF8C00,#E65100)'},
+  {id:'ener', ico:'⚡',n:'에너지 폭풍!', d:'에너지 5배 빠르게 충전!',  dur:120,col:'linear-gradient(135deg,#1565C0,#42A5F5)'},
+  {id:'luck', ico:'🍀',n:'럭키 타임!',   d:'머지마다 보석 +2!',         dur:150,col:'linear-gradient(135deg,#1B5E20,#66BB6A)'},
+  {id:'boom', ico:'🏗️',n:'건설 붐!',    d:'생성기가 Lv2 건물 생성!',  dur:180,col:'linear-gradient(135deg,#BF360C,#FF7043)'},
+  {id:'cmbo', ico:'🔥',n:'콤보 타임!',   d:'모든 머지 자동 콤보!',      dur:120,col:'linear-gradient(135deg,#880E4F,#F48FB1)'},
 ];
 
-// ═══════════════ STATE ═══════════════
-let S = {
-  grid: Array(SIZE).fill(null),
-  coins: 100,
-  energy: MAX_ENERGY,
-  maxLv: 1,
-  lastEnergy: Date.now(),
-  discovered: [],
-  questIdx: 0,
-  questReady: false,
-  lastDaily: null,
-  sell: false,
+const COIN_SHOP=[
+  {ico:'🏕️',n:'텐트',       d:'레벨 1 건물',      p:15,  a:'item',lv:1},
+  {ico:'🛖', n:'오두막',     d:'레벨 2 건물',      p:40,  a:'item',lv:2},
+  {ico:'🏠', n:'작은집',     d:'레벨 3 건물',      p:100, a:'item',lv:3},
+  {ico:'🎁', n:'미스터리 상자',d:'Lv1~4 랜덤!',   p:55,  a:'box'},
+  {ico:'🌳', n:'나무 추가',  d:'생성기 추가',      p:80,  a:'gen'},
+  {ico:'⚡', n:'에너지 +5',  d:'즉시 5 충전',      p:60,  a:'ecoin',v:5},
+];
+const GEM_SHOP=[
+  {ico:'⚡', n:'에너지 완충',  d:'에너지 가득 채워요',     p:8,  a:'efull'},
+  {ico:'🏠', n:'작은집',       d:'레벨 3 즉시 획득',       p:5,  a:'item',lv:3},
+  {ico:'🎰', n:'럭키 스핀',    d:'Lv5~9 랜덤 건물!',       p:15, a:'spin'},
+  {ico:'🏗️',n:'공사중',       d:'레벨 6 즉시 획득',       p:20, a:'item',lv:6},
+  {ico:'🌟', n:'특별 건물',    d:'Lv7~10 랜덤 건물!',      p:35, a:'spec'},
+  {ico:'⚡', n:'에너지 +20',   d:'에너지 20 즉시 추가',    p:12, a:'egem',v:20},
+];
+
+// ════════ STATE ════════
+let S={
+  grid:Array(SIZE).fill(null),
+  coins:200,gems:100,energy:MAX_E,
+  population:0,maxLv:1,
+  lastEnergy:Date.now(),
+  discovered:[1],
+  orders:[],
+  lastFreeGems:0,
+  lastDaily:null,
+  activeEvt:null,evtEnd:0,nextEvt:Date.now()+60000,
+  sell:false,
+};
+let comboTimes=[];
+let shopTab='coin';
+
+// ════════ VIB ════════
+const V={
+  merge:()=>navigator.vibrate?.([28]),
+  newBldg:()=>navigator.vibrate?.([55,30,55,30,90]),
+  deliver:()=>navigator.vibrate?.([80,40,120,40,160]),
+  event:()=>navigator.vibrate?.([70,35,70,35,110]),
+  daily:()=>navigator.vibrate?.([120,55,180]),
+  max:()=>navigator.vibrate?.([180,70,180,70,350]),
+  buy:()=>navigator.vibrate?.([40]),
 };
 
-let comboTimes = [];   // recent merge timestamps (runtime only)
-let cellSize   = 60;   // computed cell size (px)
-
-// ═══════════════ SAVE / LOAD ═══════════════
+// ════════ SAVE/LOAD ════════
 function save(){
-  localStorage.setItem('mt4', JSON.stringify({
-    grid:S.grid, coins:S.coins, energy:S.energy,
-    maxLv:S.maxLv, lastEnergy:S.lastEnergy,
-    discovered:S.discovered, questIdx:S.questIdx,
-    questReady:S.questReady, lastDaily:S.lastDaily,
+  localStorage.setItem('mt6',JSON.stringify({
+    grid:S.grid,coins:S.coins,gems:S.gems,energy:S.energy,
+    population:S.population,maxLv:S.maxLv,lastEnergy:S.lastEnergy,
+    discovered:S.discovered,orders:S.orders,lastFreeGems:S.lastFreeGems,
+    lastDaily:S.lastDaily,
+    activeEvt:S.activeEvt,evtEnd:S.evtEnd,nextEvt:S.nextEvt,
   }));
 }
 function load(){
   try{
-    const raw = localStorage.getItem('mt4');
+    const raw=localStorage.getItem('mt6');
     if(!raw) return initNew();
-    const d = JSON.parse(raw);
-    S.grid       = d.grid ?? Array(SIZE).fill(null);
-    S.coins      = d.coins  ?? 100;
-    S.energy     = d.energy ?? MAX_ENERGY;
-    S.maxLv      = d.maxLv  ?? 1;
-    S.lastEnergy = d.lastEnergy ?? Date.now();
-    S.discovered = d.discovered ?? [];
-    S.questIdx   = d.questIdx   ?? 0;
-    S.questReady = d.questReady ?? false;
-    S.lastDaily  = d.lastDaily  ?? null;
-    // Offline regen
-    const gained = Math.floor((Date.now()-S.lastEnergy)/REGEN_MS);
-    if(gained>0){
-      S.energy = Math.min(MAX_ENERGY, S.energy+gained);
-      S.lastEnergy = Date.now();
-    }
-  }catch(e){ initNew(); }
+    const d=JSON.parse(raw);
+    S.grid=d.grid??Array(SIZE).fill(null);
+    S.coins=d.coins??200;S.gems=d.gems??100;
+    S.energy=d.energy??MAX_E;S.population=d.population??0;
+    S.maxLv=d.maxLv??1;S.lastEnergy=d.lastEnergy??Date.now();
+    S.discovered=d.discovered??[1];S.orders=d.orders??[];
+    S.lastFreeGems=d.lastFreeGems??0;S.lastDaily=d.lastDaily??null;
+    S.activeEvt=d.activeEvt??null;S.evtEnd=d.evtEnd??0;
+    S.nextEvt=d.nextEvt??Date.now()+60000;
+    const gain=Math.floor((Date.now()-S.lastEnergy)/REGEN_MS);
+    if(gain>0){S.energy=Math.min(MAX_E,S.energy+gain);S.lastEnergy=Date.now();}
+    if(S.orders.length<3) fillOrders();
+  }catch(e){initNew();}
 }
 function initNew(){
-  S.grid = Array(SIZE).fill(null);
-  // 3 generators, 6 level-1 items
-  const genPositions = [0, 5, 10];
-  const itemPositions = [2, 3, 7, 8, 12, 13];
-  genPositions.forEach(i => S.grid[i] = {gen:true});
-  itemPositions.forEach(i => S.grid[i] = {lv:1});
-  S.coins=100; S.energy=MAX_ENERGY; S.maxLv=1;
-  S.discovered=[1]; S.questIdx=0; S.questReady=false;
-  S.lastEnergy=Date.now(); S.lastDaily=null;
+  S.grid=Array(SIZE).fill(null);
+  // 3 generators, 6 level-1, 2 level-2
+  [0,5,10].forEach(i=>S.grid[i]={gen:true});
+  [2,3,7,8,12,13].forEach(i=>S.grid[i]={lv:1});
+  [16,17].forEach(i=>S.grid[i]={lv:2});
+  S.coins=200;S.gems=100;S.energy=MAX_E;
+  S.population=0;S.maxLv=2;S.discovered=[1,2];
+  S.orders=[];S.lastFreeGems=0;S.lastDaily=null;
+  S.activeEvt=null;S.evtEnd=0;S.nextEvt=Date.now()+90000;
+  S.lastEnergy=Date.now();
+  fillOrders();
 }
 
-// ═══════════════ RESIZE ═══════════════
+// ════════ ORDERS ════════
+function makeOrder(){
+  const maxReq=Math.min(MAX_LV, Math.max(2, S.maxLv+1));
+  const minReq=Math.max(1, S.maxLv-1);
+  const lv=minReq+Math.floor(Math.random()*(maxReq-minReq+1));
+  const char=CHARS[Math.floor(Math.random()*CHARS.length)];
+  const coins=Math.round(BLDGS[lv-1].c*3.5);
+  const gems=lv>=4?Math.floor(lv/3):0;
+  return{id:Date.now()+Math.random(),lv,char,coins,gems};
+}
+function fillOrders(){
+  while(S.orders.length<3) S.orders.push(makeOrder());
+}
+
+function renderOrders(){
+  const el=document.getElementById('orders-inner');
+  el.innerHTML='';
+  S.orders.forEach(ord=>{
+    const b=BLDGS[ord.lv-1];
+    const has=S.grid.some(item=>item&&!item.gen&&item.lv===ord.lv);
+    const card=document.createElement('div');
+    card.className='ord';
+    card.innerHTML=`
+      <div class="char">${ord.char.f}</div>
+      <div class="bemo">${b.e}</div>
+      <div class="bname">${b.n}</div>
+      <div class="rwd">+${ord.coins}🪙${ord.gems?'<br>+'+ord.gems+'💎':''}</div>
+      <button class="dbtn ${has?'ready':'noready'}" ${has?'':'disabled'}>
+        ${has?'배달하기 ✓':'필요: Lv.'+ord.lv}
+      </button>
+      <span class="lv-tag">Lv.${ord.lv}</span>`;
+    if(has) card.querySelector('.dbtn').addEventListener('click',()=>deliver(ord.id));
+    // pulse matching cells
+    if(has){
+      S.grid.forEach((item,i)=>{
+        if(item&&!item.gen&&item.lv===ord.lv){
+          document.querySelector(`[data-idx="${i}"]`)?.classList.add('match');
+        }
+      });
+    }
+    el.appendChild(card);
+  });
+}
+
+function deliver(ordId){
+  const idx=S.orders.findIndex(o=>o.id===ordId);
+  if(idx<0) return;
+  const ord=S.orders[idx];
+  const cellIdx=S.grid.findIndex(item=>item&&!item.gen&&item.lv===ord.lv);
+  if(cellIdx<0){toast(BLDGS[ord.lv-1].n+'이 없어요!');return;}
+  S.grid[cellIdx]=null;
+  S.coins+=ord.coins;
+  if(ord.gems) S.gems+=ord.gems;
+  S.population++;
+  S.orders.splice(idx,1);
+  fillOrders();
+  V.deliver();
+  floatReward('+'+ord.coins+'🪙',cellIdx,'#FFD700');
+  if(ord.gems) floatReward('+'+ord.gems+'💎',cellIdx,'#CE93D8');
+  popCell(cellIdx);
+  spawnParticles(cellIdx,BLDGS[ord.lv-1]);
+  toast('배달 완료! 인구 +1 🏘️');
+  render();save();
+}
+
+// ════════ RESIZE ════════
 function computeSize(){
-  const vw = Math.min(window.innerWidth, 460);
-  const vh = window.innerHeight;
-  const hudH   = document.getElementById('hud').offsetHeight   || 52;
-  const questH = document.getElementById('quest-bar').offsetHeight || 44;
-  const botH   = document.getElementById('bottom').offsetHeight  || 86;
-  const availH = vh - hudH - questH - botH - 18;
-  const availW = vw - 20;
-  const byH = (availH - (ROWS-1)*5 - 20) / ROWS;
-  const byW = (availW - (COLS-1)*5 - 20) / COLS;
-  cellSize = Math.floor(Math.min(byH, byW, 74));
-  const grid = document.getElementById('grid');
-  grid.style.gridTemplateColumns = `repeat(5,${cellSize}px)`;
+  const vw=Math.min(window.innerWidth,460),vh=window.innerHeight;
+  const hH=document.getElementById('hud').offsetHeight||80;
+  const ewH=document.getElementById('evt-wrap').offsetHeight||0;
+  const owH=document.getElementById('orders-wrap').offsetHeight||90;
+  const bH=document.getElementById('bottom').offsetHeight||52;
+  const avH=vh-hH-ewH-owH-bH-14;
+  const avW=vw-20;
+  const byH=(avH-(ROWS-1)*5-18)/ROWS;
+  const byW=(avW-(COLS-1)*5-18)/COLS;
+  const cs=Math.floor(Math.min(byH,byW,72));
+  document.getElementById('grid').style.gridTemplateColumns=`repeat(5,${cs}px)`;
 }
 
-// ═══════════════ RENDER ═══════════════
-function render(){ renderGrid(); renderHUD(); renderEnergy(); renderQuest(); }
+// ════════ RENDER ════════
+function render(){renderGrid();renderHUD();renderOrders();}
 
 function renderGrid(){
-  const G = document.getElementById('grid');
-  if(G.children.length !== SIZE){
+  const G=document.getElementById('grid');
+  if(G.children.length!==SIZE){
     G.innerHTML='';
-    for(let i=0;i<SIZE;i++){
-      const c=document.createElement('div');
-      c.className='cell'; c.dataset.idx=i;
-      G.appendChild(c);
-    }
+    for(let i=0;i<SIZE;i++){const c=document.createElement('div');c.className='cell';c.dataset.idx=i;G.appendChild(c);}
     bindGrid();
   }
+  // clear match
+  document.querySelectorAll('.cell.match').forEach(c=>c.classList.remove('match'));
   for(let i=0;i<SIZE;i++){
-    const cell=G.children[i];
-    const item=S.grid[i];
-    cell.innerHTML='';
-    cell.className='cell'+(item?' filled':'');
+    const cell=G.children[i],item=S.grid[i];
+    cell.innerHTML='';cell.className='cell'+(item?' filled':'');
     if(!item) continue;
     const card=document.createElement('div');
     card.className='item'+(item.gen?' gen-item':'');
+    if(!item.gen){const b=BLDGS[item.lv-1];card.classList.add('t'+b.t);card.style.background=`linear-gradient(135deg,${b.g})`;}
+    const emo=document.createElement('span');emo.className='emo';
+    emo.textContent=item.gen?'🌳':BLDGS[item.lv-1].e;card.appendChild(emo);
     if(!item.gen){
-      const b=BLDGS[item.lv-1];
-      card.style.background=`linear-gradient(135deg,${b.gc})`;
-      card.style.boxShadow=`0 2px 8px ${b.bg}88`;
-    }
-    const emo=document.createElement('span');
-    emo.className='emo';
-    emo.textContent=item.gen?'🌳':BLDGS[item.lv-1].e;
-    card.appendChild(emo);
-    if(!item.gen){
-      const nm=document.createElement('span');
-      nm.className='nm'; nm.textContent=BLDGS[item.lv-1].name;
-      card.appendChild(nm);
-      const lv=document.createElement('span');
-      lv.className='lv'; lv.textContent=item.lv;
-      card.appendChild(lv);
+      const nm=document.createElement('span');nm.className='nm';nm.textContent=BLDGS[item.lv-1].n;card.appendChild(nm);
+      const lv=document.createElement('span');lv.className='lv';lv.textContent=item.lv;card.appendChild(lv);
     }
     cell.appendChild(card);
   }
 }
 
 function renderHUD(){
-  document.getElementById('v-coins').textContent = S.coins.toLocaleString();
-  document.getElementById('v-maxlv').textContent = S.maxLv;
-  document.getElementById('v-e').textContent = S.energy;
-}
-
-function renderEnergy(){
-  const row = document.getElementById('e-row');
-  // Remove pips
-  row.querySelectorAll('.e-pip').forEach(p=>p.remove());
-  // Add 20 pips (in groups of 5 visually)
-  const label = row.querySelector('.e-label');
-  for(let i=0;i<MAX_ENERGY;i++){
-    const p=document.createElement('div');
-    p.className='e-pip'+(i<S.energy?' on':'');
-    row.insertBefore(p, document.getElementById('e-timer'));
-  }
-  const el=document.getElementById('e-timer');
-  if(S.energy>=MAX_ENERGY){ el.textContent=''; return; }
-  const rem=Math.max(0,REGEN_MS-(Date.now()-S.lastEnergy)%REGEN_MS);
+  document.getElementById('vcoin').textContent=S.coins.toLocaleString();
+  document.getElementById('vgem').textContent=S.gems;
+  document.getElementById('vpop').textContent=S.population;
+  const pct=Math.round(S.energy/MAX_E*100);
+  document.getElementById('efg').style.width=pct+'%';
+  document.getElementById('ecnt').textContent=S.energy+'/'+MAX_E;
+  const t=document.getElementById('etmr');
+  if(S.energy>=MAX_E){t.textContent='';return;}
+  const rm=S.activeEvt==='ener'?REGEN_MS/5:REGEN_MS;
+  const rem=Math.max(0,rm-(Date.now()-S.lastEnergy)%rm);
   const s=Math.ceil(rem/1000);
-  el.textContent=`(${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')})`;
+  t.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 }
 
-function renderQuest(){
-  if(S.questIdx >= QUESTS.length){
-    document.getElementById('q-text').textContent='👑 모든 퀘스트 완료!';
-    document.getElementById('q-reward').textContent='';
-    document.getElementById('q-claim').style.display='none';
-    return;
-  }
-  const q=QUESTS[S.questIdx];
-  document.getElementById('q-text').textContent=q.desc;
-  let rstr = '+'+q.rc.toLocaleString()+'🪙';
-  if(q.re>0) rstr += ' +'+q.re+'⚡';
-  document.getElementById('q-reward').textContent=rstr;
-  const btn=document.getElementById('q-claim');
-  if(S.questReady){
-    btn.style.display='block';
-    document.getElementById('q-reward').style.display='none';
-  } else {
-    btn.style.display='none';
-    document.getElementById('q-reward').style.display='';
-  }
+function renderEvtBanner(){
+  const wrap=document.getElementById('evt-wrap');
+  if(!S.activeEvt){wrap.innerHTML='';return;}
+  const ev=EVENTS.find(e=>e.id===S.activeEvt);if(!ev){wrap.innerHTML='';return;}
+  const rem=Math.max(0,Math.round((S.evtEnd-Date.now())/1000));
+  const m=String(Math.floor(rem/60)).padStart(2,'0'),s=String(rem%60).padStart(2,'0');
+  if(!wrap.querySelector('.evb')){
+    wrap.innerHTML=`<div class="evb eslide" style="background:${ev.col}">
+      <span class="ei">${ev.ico}</span>
+      <span style="flex:1;min-width:0"><span class="en">${ev.n}</span><br><span class="ed">${ev.d}</span></span>
+      <span class="et" id="etcnt">${m}:${s}</span>
+    </div>`;computeSize();
+  } else {const el=document.getElementById('etcnt');if(el)el.textContent=m+':'+s;}
 }
 
-// ═══════════════ DRAG ═══════════════
+// ════════ DRAG ════════
 let drag={on:false,from:-1,over:-1};
-
 function bindGrid(){
   const G=document.getElementById('grid');
   G.addEventListener('touchstart',onTS,{passive:false});
   G.addEventListener('touchmove', onTM,{passive:false});
   G.addEventListener('touchend',  onTE);
   G.addEventListener('touchcancel',onTE);
-  // Also support mouse for desktop testing
   G.addEventListener('mousedown', onMS);
 }
-
-function cellAt(x,y){
-  const el=document.elementFromPoint(x,y);
-  if(!el) return -1;
-  const c=el.closest?.('.cell');
-  return c ? +c.dataset.idx : -1;
-}
-
+function cellAt(x,y){const el=document.elementFromPoint(x,y);if(!el)return -1;const c=el.closest?.('.cell');return c?+c.dataset.idx:-1;}
 function startDrag(idx,x,y){
-  if(!S.grid[idx]) return;
+  if(idx<0||!S.grid[idx])return;
   const item=S.grid[idx];
-  if(S.sell){ sellItem(idx); return; }
-  if(item.gen){ tapGen(idx); return; }
-  drag.on=true; drag.from=idx; drag.over=-1;
-  const g=document.getElementById('ghost');
+  if(S.sell){sellItem(idx);return;}
+  if(item.gen){tapGen(idx);return;}
+  drag.on=true;drag.from=idx;drag.over=-1;
   const b=BLDGS[item.lv-1];
-  g.textContent=b.e;
-  g.style.background=`linear-gradient(135deg,${b.gc})`;
-  g.style.display='flex';
-  g.style.left=(x-30)+'px'; g.style.top=(y-60)+'px';
+  const g=document.getElementById('ghost');
+  g.textContent=b.e;g.style.background=`linear-gradient(135deg,${b.g})`;
+  g.style.display='flex';g.style.left=(x-28)+'px';g.style.top=(y-58)+'px';
   document.querySelector(`[data-idx="${idx}"]`)?.classList.add('drag-src');
 }
 function moveDrag(x,y){
-  if(!drag.on) return;
-  const g=document.getElementById('ghost');
-  g.style.left=(x-30)+'px'; g.style.top=(y-60)+'px';
-  const ov=cellAt(x,y);
-  if(ov===drag.over) return;
-  if(drag.over>=0) document.querySelector(`[data-idx="${drag.over}"]`)?.classList.remove('hl-merge','hl-move');
+  if(!drag.on)return;
+  const g=document.getElementById('ghost');g.style.left=(x-28)+'px';g.style.top=(y-58)+'px';
+  const ov=cellAt(x,y);if(ov===drag.over)return;
+  if(drag.over>=0)document.querySelector(`[data-idx="${drag.over}"]`)?.classList.remove('hl-merge','hl-move');
   drag.over=ov;
   if(ov>=0&&ov!==drag.from){
-    const to=S.grid[ov], fr=S.grid[drag.from];
+    const to=S.grid[ov],fr=S.grid[drag.from];
     const c=document.querySelector(`[data-idx="${ov}"]`);
-    if(c){
-      if(!to) c.classList.add('hl-move');
-      else if(!to.gen&&!fr.gen&&to.lv===fr.lv) c.classList.add('hl-merge');
-    }
+    if(c){if(!to)c.classList.add('hl-move');else if(!to.gen&&!fr?.gen&&to.lv===fr?.lv)c.classList.add('hl-merge');}
   }
 }
 function endDrag(x,y){
-  if(!drag.on) return;
+  if(!drag.on)return;
   const to=cellAt(x,y);
   document.getElementById('ghost').style.display='none';
-  document.querySelectorAll('.drag-src,.hl-merge,.hl-move')
-    .forEach(c=>c.classList.remove('drag-src','hl-merge','hl-move'));
+  document.querySelectorAll('.drag-src,.hl-merge,.hl-move').forEach(c=>c.classList.remove('drag-src','hl-merge','hl-move'));
   drag.on=false;
-  if(to<0||to===drag.from) return;
-  doMove(drag.from, to);
+  if(to<0||to===drag.from)return;
+  doMove(drag.from,to);
 }
-
-// Touch
-function onTS(e){
-  e.preventDefault();
-  if(e.touches.length!==1) return;
-  const t=e.touches[0];
-  startDrag(cellAt(t.clientX,t.clientY),t.clientX,t.clientY);
-}
-function onTM(e){ e.preventDefault(); if(e.touches.length!==1) return; const t=e.touches[0]; moveDrag(t.clientX,t.clientY); }
-function onTE(e){ const t=e.changedTouches[0]; endDrag(t.clientX,t.clientY); }
-
-// Mouse (for desktop testing)
+function onTS(e){e.preventDefault();if(e.touches.length!==1)return;const t=e.touches[0];startDrag(cellAt(t.clientX,t.clientY),t.clientX,t.clientY);}
+function onTM(e){e.preventDefault();if(e.touches.length!==1)return;const t=e.touches[0];moveDrag(t.clientX,t.clientY);}
+function onTE(e){const t=e.changedTouches[0];endDrag(t.clientX,t.clientY);}
 function onMS(e){
   startDrag(cellAt(e.clientX,e.clientY),e.clientX,e.clientY);
-  const mm=(ev)=>moveDrag(ev.clientX,ev.clientY);
-  const mu=(ev)=>{ endDrag(ev.clientX,ev.clientY); document.removeEventListener('mousemove',mm); document.removeEventListener('mouseup',mu); };
-  document.addEventListener('mousemove',mm);
-  document.addEventListener('mouseup',mu);
+  const mm=ev=>moveDrag(ev.clientX,ev.clientY);
+  const mu=ev=>{endDrag(ev.clientX,ev.clientY);document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);};
+  document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu);
 }
 
-// ═══════════════ MOVE / MERGE ═══════════════
-function doMove(from, to){
-  const fr=S.grid[from], toItem=S.grid[to];
-  if(!fr||fr.gen) return;
-  if(!toItem){
-    S.grid[to]=fr; S.grid[from]=null;
-    render(); save(); return;
-  }
-  if(toItem.gen) return;
-  if(fr.lv!==toItem.lv) return;
-  if(fr.lv>=MAX_LV){ toast('👑 이미 최고 레벨이에요!'); return; }
+// ════════ MERGE ════════
+function doMove(from,to){
+  const fr=S.grid[from],toItem=S.grid[to];
+  if(!fr||fr.gen)return;
+  if(!toItem){S.grid[to]=fr;S.grid[from]=null;render();save();return;}
+  if(toItem.gen)return;
+  if(fr.lv!==toItem.lv)return;
+  if(fr.lv>=MAX_LV){toast('👑 이미 최고 레벨!');return;}
   const nlv=fr.lv+1;
-  // Combo calc
+  V.merge();
   const now=Date.now();
-  comboTimes.push(now);
-  comboTimes=comboTimes.filter(t=>now-t<5000);
-  let mult=1, comboMsg='';
-  if(comboTimes.length>=5){ mult=2;   comboMsg='🔥🔥 SUPER COMBO! x2'; }
-  else if(comboTimes.length>=3){ mult=1.5; comboMsg='🔥 COMBO! x1.5'; }
-  const base=BLDGS[nlv-1].c;
-  const earned=Math.round(base*mult);
-  S.grid[from]=null;
-  S.grid[to]={lv:nlv};
-  S.coins+=earned;
+  comboTimes.push(now);comboTimes=comboTimes.filter(t=>now-t<5000);
+  const autoCombo=S.activeEvt==='cmbo';
+  let mult=1,cmsg='';
+  if(autoCombo||comboTimes.length>=5){mult=2;cmsg='🔥🔥 SUPER COMBO! x2';}
+  else if(comboTimes.length>=3){mult=1.5;cmsg='🔥 COMBO! x1.5';}
+  if(S.activeEvt==='gold')mult*=2;
+  const earned=Math.round(BLDGS[nlv-1].c*mult);
+  S.grid[from]=null;S.grid[to]={lv:nlv};S.coins+=earned;
+  if(S.activeEvt==='luck'){S.gems+=2;floatReward('+2💎',to,'#CE93D8');}
   if(nlv>S.maxLv){
     S.maxLv=nlv;
-    checkQuestProgress(nlv);
     if(!S.discovered.includes(nlv)){
       S.discovered.push(nlv);
-      setTimeout(()=>showNewBldg(nlv), 300);
+      setTimeout(()=>showNb(nlv),300);
+      nlv===MAX_LV?V.max():V.newBldg();
     }
   }
-  floatReward('+'+(mult>1?earned+'⭐':earned+'🪙'), to, mult>1?'#FFD700':'#FFF9C4');
-  spawnParticles(to, BLDGS[nlv-1].bg);
+  const fc=S.activeEvt==='gold'?'#FFD700':'#FFF9C4';
+  floatReward('+'+(mult>1?earned+'⭐':earned+'🪙'),to,fc);
+  spawnParticles(to,BLDGS[nlv-1]);
   popCell(to);
-  if(comboMsg) showCombo(comboMsg);
-  render(); save();
+  if(cmsg)showCombo(cmsg,S.activeEvt);
+  render();save();
 }
 
-// ═══════════════ GENERATOR ═══════════════
+// ════════ GENERATOR ════════
 function tapGen(idx){
-  if(S.energy<=0){ toast('⚡ 에너지가 없어요! 잠시 기다려주세요.'); return; }
+  if(S.energy<=0){toast('⚡ 에너지 없음! 보석 상점에서 충전하세요 💎');return;}
   const empty=firstEmpty();
-  if(empty<0){ toast('❗ 빈 칸이 없어요! 건물을 합쳐주세요.'); return; }
+  if(empty<0){toast('❗ 빈 칸 없음! 건물을 합치세요.');return;}
   S.energy--;
-  S.grid[empty]={lv:1};
-  popCell(idx);
-  render(); save();
+  const genLv=S.activeEvt==='boom'?2:1;
+  S.grid[empty]={lv:genLv};
+  V.merge();popCell(idx);render();save();
 }
-function firstEmpty(){ for(let i=0;i<SIZE;i++) if(!S.grid[i]) return i; return -1; }
+function firstEmpty(){for(let i=0;i<SIZE;i++)if(!S.grid[i])return i;return -1;}
 
-// ═══════════════ SELL ═══════════════
+// ════════ SELL ════════
 function toggleSell(){
   S.sell=!S.sell;
-  const b=document.getElementById('btn-sell');
-  if(S.sell){
-    b.textContent='✅ 판매 취소'; b.classList.add('active');
-    toast('팔고 싶은 건물을 탭하세요 (코인 40% 환급)');
-  } else {
-    b.textContent='💰 판매'; b.classList.remove('active');
-  }
+  const b=document.getElementById('bsell');
+  if(S.sell){b.textContent='✅ 판매 취소';b.classList.add('active');toast('판매할 건물을 탭하세요 (40% 환급)');}
+  else{b.textContent='💰 판매';b.classList.remove('active');}
 }
 function sellItem(idx){
   const item=S.grid[idx];
-  if(!item||item.gen){ toast('나무는 판매할 수 없어요'); return; }
-  const price=Math.floor(BLDGS[item.lv-1].c*0.4);
-  S.grid[idx]=null;
-  S.coins+=price;
-  toast(`${BLDGS[item.lv-1].name} 판매 → +${price}🪙`);
+  if(!item||item.gen){toast('나무는 판매할 수 없어요');return;}
+  const p=Math.floor(BLDGS[item.lv-1].c*0.4);
+  S.grid[idx]=null;S.coins+=p;
+  toast(BLDGS[item.lv-1].n+' 판매 → +'+p+'🪙');
   S.sell=false;
-  const b=document.getElementById('btn-sell');
-  b.textContent='💰 판매'; b.classList.remove('active');
-  render(); save();
+  const b=document.getElementById('bsell');b.textContent='💰 판매';b.classList.remove('active');
+  render();save();
 }
 
-// ═══════════════ SHOP ═══════════════
+// ════════ SHOP ════════
 function openShop(){
-  const list=document.getElementById('shop-list');
-  document.getElementById('shop-coins').textContent=S.coins.toLocaleString();
-  list.innerHTML='';
-  SHOP_ITEMS.forEach(it=>{
-    const b=document.createElement('button');
-    b.className='si';
-    b.innerHTML=`
-      <span class="si-emo">${it.emo}</span>
-      <span class="si-info"><span class="si-name">${it.name}</span><span class="si-desc">${it.desc}</span></span>
-      <span class="si-price">${it.price}🪙</span>`;
-    b.addEventListener('click',()=>doBuy(it));
-    list.appendChild(b);
-  });
-  document.getElementById('shop-overlay').classList.remove('hidden');
+  document.getElementById('shcoin').textContent=S.coins.toLocaleString();
+  document.getElementById('shgem').textContent=S.gems;
+  renderShopList();
+  document.getElementById('shop-ov').classList.remove('hidden');
 }
-function closeShop(){ document.getElementById('shop-overlay').classList.add('hidden'); }
-function overlayBg(e){ if(e.target===document.getElementById('shop-overlay')) closeShop(); }
-function doBuy(it){
-  if(S.coins<it.price){ toast('🪙 코인이 부족해요!'); return; }
-  if(it.act==='energy'){
-    S.coins-=it.price;
-    S.energy=Math.min(MAX_ENERGY,S.energy+it.val);
-    toast(`⚡ 에너지 +${it.val} 충전!`);
-    closeShop(); render(); save(); return;
-  }
-  const empty=firstEmpty();
-  if(empty<0){ toast('❗ 빈 칸이 없어요!'); return; }
-  S.coins-=it.price;
-  if(it.act==='gen')  S.grid[empty]={gen:true};
-  else if(it.act==='item') S.grid[empty]={lv:it.lv};
-  else if(it.act==='box'){
-    const lv=Math.ceil(Math.random()*4);
-    S.grid[empty]={lv};
-    toast(`🎁 ${BLDGS[lv-1].name} 획득!`);
-  }
-  closeShop(); render(); save();
-  document.getElementById('shop-coins').textContent=S.coins.toLocaleString();
+function closeShop(){document.getElementById('shop-ov').classList.add('hidden');}
+function shopBg(e){if(e.target===document.getElementById('shop-ov'))closeShop();}
+function switchTab(t){
+  shopTab=t;
+  document.querySelectorAll('.stab').forEach((b,i)=>b.classList.toggle('on',i===(t==='coin'?0:1)));
+  renderShopList();
 }
+function renderShopList(){
+  const list=document.getElementById('slist');list.innerHTML='';
+  if(shopTab==='gem'){
+    const fb=document.createElement('button');fb.id='freebtn';
+    const cd=8*60*1000,el=Date.now()-S.lastFreeGems,ready=el>=cd;
+    if(ready){fb.innerHTML='🎬 무료 보석 받기 <strong style="color:#7D3C98;font-size:16px">+20💎</strong>';}
+    else{const r=Math.ceil((cd-el)/1000);fb.innerHTML=`🕐 재충전 중... ${Math.floor(r/60)}:${String(r%60).padStart(2,'0')}`;fb.disabled=true;}
+    fb.addEventListener('click',claimFreeGems);list.appendChild(fb);
+    GEM_SHOP.forEach(it=>{
+      const b=document.createElement('button');b.className='si gi';
+      b.innerHTML=`<span class="sico">${it.ico}</span><span class="sinfo"><span class="sname">${it.n}</span><span class="sdesc">${it.d}</span></span><span class="sprice pg">${it.p}💎</span>`;
+      b.addEventListener('click',()=>buyGem(it));list.appendChild(b);
+    });
+  } else {
+    COIN_SHOP.forEach(it=>{
+      const b=document.createElement('button');b.className='si';
+      b.innerHTML=`<span class="sico">${it.ico}</span><span class="sinfo"><span class="sname">${it.n}</span><span class="sdesc">${it.d}</span></span><span class="sprice pc">${it.p}🪙</span>`;
+      b.addEventListener('click',()=>buyCoin(it));list.appendChild(b);
+    });
+  }
+}
+function buyCoin(it){
+  if(S.coins<it.p){toast('🪙 코인 부족!');return;}
+  if(it.a==='ecoin'){S.coins-=it.p;S.energy=Math.min(MAX_E,S.energy+it.v);V.buy();toast('⚡ 에너지 +'+it.v+'!');closeShop();render();save();return;}
+  const empty=firstEmpty();if(empty<0){toast('❗ 빈 칸 없음!');return;}
+  S.coins-=it.p;V.buy();
+  if(it.a==='gen')S.grid[empty]={gen:true};
+  else if(it.a==='item')S.grid[empty]={lv:it.lv};
+  else if(it.a==='box'){const lv=Math.ceil(Math.random()*4);S.grid[empty]={lv};toast('🎁 '+BLDGS[lv-1].n+' 획득!');}
+  closeShop();render();save();
+}
+function buyGem(it){
+  if(S.gems<it.p){toast('💎 보석 부족!\n무료 버튼을 눌러보세요!');return;}
+  if(it.a==='efull'){S.gems-=it.p;S.energy=MAX_E;S.lastEnergy=Date.now();V.buy();toast('⚡ 에너지 완충!');closeShop();render();save();return;}
+  if(it.a==='egem'){S.gems-=it.p;S.energy=Math.min(MAX_E,S.energy+it.v);V.buy();toast('⚡ 에너지 +'+it.v+'!');closeShop();render();save();return;}
+  const empty=firstEmpty();if(empty<0){toast('❗ 빈 칸 없음!');return;}
+  S.gems-=it.p;V.buy();
+  if(it.a==='item')S.grid[empty]={lv:it.lv};
+  else if(it.a==='spin'){const lv=5+Math.floor(Math.random()*5);S.grid[empty]={lv};toast('🎰 '+BLDGS[lv-1].n+' (Lv.'+lv+') 획득!');}
+  else if(it.a==='spec'){const lv=7+Math.floor(Math.random()*4);S.grid[empty]={lv};toast('🌟 '+BLDGS[lv-1].n+' (Lv.'+lv+') 획득!');}
+  closeShop();render();save();
+}
+function claimFreeGems(){S.gems+=20;S.lastFreeGems=Date.now();V.buy();toast('💎 무료 보석 +20!');closeShop();render();save();}
 
-// ═══════════════ QUESTS ═══════════════
-function checkQuestProgress(newLv){
-  if(S.questIdx>=QUESTS.length) return;
-  const q=QUESTS[S.questIdx];
-  if(newLv>=q.lv && !S.questReady){
-    S.questReady=true;
-    toast('🎯 퀘스트 달성! 보상을 받으세요!');
-    renderQuest();
-  }
+// ════════ NEW BUILDING ════════
+function showNb(lv){
+  const b=BLDGS[lv-1];
+  document.getElementById('nbemo').textContent=b.e;
+  document.getElementById('nbname').textContent=b.n;
+  document.getElementById('nblv').textContent='레벨 '+lv+' · '+TIER_NAME[b.t]+' 등급';
+  document.getElementById('nb-ov').classList.remove('hidden');
 }
-function claimQuest(){
-  if(!S.questReady||S.questIdx>=QUESTS.length) return;
-  const q=QUESTS[S.questIdx];
-  S.coins+=q.rc;
-  S.energy=Math.min(MAX_ENERGY,S.energy+q.re);
-  S.questReady=false;
-  S.questIdx++;
-  let msg=`🎉 +${q.rc.toLocaleString()}🪙`;
-  if(q.re>0) msg+=` +${q.re}⚡`;
-  toast(msg);
-  render(); save();
-}
+function closeNb(){document.getElementById('nb-ov').classList.add('hidden');}
 
-// ═══════════════ DAILY BONUS ═══════════════
+// ════════ DAILY ════════
 function checkDaily(){
   const today=new Date().toDateString();
-  if(S.lastDaily===today) return;
-  const bonus=Math.max(200, S.maxLv*50);
-  const eBonus=Math.min(10, Math.floor(S.maxLv/2)+3);
-  document.getElementById('daily-reward').textContent=`+${bonus}🪙  +${eBonus}⚡`;
-  document.getElementById('daily-overlay').classList.remove('hidden');
+  if(S.lastDaily===today)return;
+  const cb=Math.max(200,S.maxLv*80),gb=Math.min(20,5+Math.floor(S.maxLv/2)),eb=Math.min(10,3+Math.floor(S.maxLv/3));
+  document.getElementById('drwd').innerHTML=`+${cb}🪙<br>+${gb}💎  +${eb}⚡`;
+  document.getElementById('daily-ov').classList.remove('hidden');
 }
 function claimDaily(){
   const today=new Date().toDateString();
-  const bonus=Math.max(200, S.maxLv*50);
-  const eBonus=Math.min(10, Math.floor(S.maxLv/2)+3);
-  S.coins+=bonus;
-  S.energy=Math.min(MAX_ENERGY,S.energy+eBonus);
-  S.lastDaily=today;
-  document.getElementById('daily-overlay').classList.add('hidden');
-  render(); save();
+  const cb=Math.max(200,S.maxLv*80),gb=Math.min(20,5+Math.floor(S.maxLv/2)),eb=Math.min(10,3+Math.floor(S.maxLv/3));
+  S.coins+=cb;S.gems+=gb;S.energy=Math.min(MAX_E,S.energy+eb);
+  S.lastDaily=today;V.daily();
+  document.getElementById('daily-ov').classList.add('hidden');
+  render();save();
 }
 
-// ═══════════════ NEW BUILDING POPUP ═══════════════
-function showNewBldg(lv){
-  const b=BLDGS[lv-1];
-  document.getElementById('nb-emo').textContent=b.e;
-  document.getElementById('nb-name').textContent=b.name;
-  document.getElementById('nb-lv').textContent='레벨 '+lv;
-  document.getElementById('new-bldg').classList.remove('hidden');
+// ════════ EVENTS ════════
+function tickEvents(){
+  const now=Date.now();
+  if(S.activeEvt&&now>=S.evtEnd){
+    S.activeEvt=null;S.evtEnd=0;
+    S.nextEvt=now+(6+Math.random()*9)*60000;
+    document.getElementById('evt-wrap').innerHTML='';
+    computeSize();save();return;
+  }
+  if(!S.activeEvt&&now>=S.nextEvt){
+    const ev=EVENTS[Math.floor(Math.random()*EVENTS.length)];
+    S.activeEvt=ev.id;S.evtEnd=now+ev.dur*1000;
+    document.getElementById('eico').textContent=ev.ico;
+    document.getElementById('ename').textContent=ev.n;
+    document.getElementById('edesc').textContent=ev.d;
+    document.getElementById('edur').textContent=Math.round(ev.dur/60)+'분 지속';
+    document.getElementById('evt-ov').classList.remove('hidden');
+    V.event();renderEvtBanner();computeSize();save();
+  }
 }
-function closeNewBldg(){ document.getElementById('new-bldg').classList.add('hidden'); }
+function closeEvtPop(){document.getElementById('evt-ov').classList.add('hidden');}
 
-// ═══════════════ EFFECTS ═══════════════
-function spawnParticles(cellIdx, color){
-  const cell=document.querySelector(`[data-idx="${cellIdx}"]`);
-  if(!cell) return;
+// ════════ EFFECTS ════════
+function spawnParticles(cidx,bldg){
+  const cell=document.querySelector(`[data-idx="${cidx}"]`);if(!cell)return;
   const r=cell.getBoundingClientRect();
-  const cx=r.left+r.width/2, cy=r.top+r.height/2;
-  const colors=['#FFD700','#FF8C00','#FFF59D','#FF6B6B','#80CBC4','#ffffff', color];
-  for(let i=0;i<10;i++){
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const base=bldg.g.split(',')[0].trim();
+  const cols=['#FFD700','#FFF9C4','#FF8C00',base,'#ffffff','#FFE082'];
+  for(let i=0;i<12;i++){
     const p=document.createElement('div');
-    const angle=(i/10)*Math.PI*2+(Math.random()-.5)*.6;
-    const dist=28+Math.random()*36;
-    const sz=4+Math.random()*6;
-    p.className='ptcl';
-    p.style.cssText=`left:${cx}px;top:${cy}px;width:${sz}px;height:${sz}px;
-      background:${colors[i%colors.length]};
-      --tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;`;
-    document.body.appendChild(p);
-    setTimeout(()=>p.remove(),720);
+    const angle=(i/12)*Math.PI*2+(Math.random()-.5)*.5;
+    const dist=26+Math.random()*36;const sz=4+Math.random()*6;
+    p.className='pt';
+    p.style.cssText=`left:${cx}px;top:${cy}px;width:${sz}px;height:${sz}px;background:${cols[i%cols.length]};--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;`;
+    document.body.appendChild(p);setTimeout(()=>p.remove(),760);
   }
 }
 function popCell(idx){
-  const c=document.querySelector(`[data-idx="${idx}"]`);
-  if(!c) return;
-  c.classList.add('pop');
-  setTimeout(()=>c.classList.remove('pop'),380);
-  // shine
-  setTimeout(()=>{
-    const card=c.querySelector('.item');
-    if(card){ card.classList.add('shining'); setTimeout(()=>card.classList.remove('shining'),550); }
-  },100);
+  const c=document.querySelector(`[data-idx="${idx}"]`);if(!c)return;
+  c.classList.add('pop');setTimeout(()=>c.classList.remove('pop'),360);
+  setTimeout(()=>{const card=c.querySelector('.item');if(card){card.classList.add('sh');setTimeout(()=>card.classList.remove('sh'),520);}},70);
 }
-function floatReward(txt, cellIdx, color='#FFF9C4'){
-  const c=document.querySelector(`[data-idx="${cellIdx}"]`);
-  if(!c) return;
+function floatReward(txt,cidx,color='#FFF9C4'){
+  const c=document.querySelector(`[data-idx="${cidx}"]`);if(!c)return;
   const r=c.getBoundingClientRect();
-  const el=document.createElement('div');
-  el.className='flt'; el.textContent=txt;
-  el.style.color=color;
-  el.style.left=(r.left+r.width/2-16)+'px';
-  el.style.top=r.top+'px';
-  document.body.appendChild(el);
-  setTimeout(()=>el.remove(),900);
+  const el=document.createElement('div');el.className='flt';
+  el.textContent=txt;el.style.color=color;
+  el.style.left=(r.left+r.width/2-14)+'px';el.style.top=r.top+'px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),920);
 }
-let comboTimer=null;
-function showCombo(msg){
-  const el=document.getElementById('combo-pop');
-  el.textContent=msg;
-  el.style.display='block';
-  el.style.animation='comboIn .35s cubic-bezier(.34,1.56,.64,1) forwards';
-  clearTimeout(comboTimer);
-  comboTimer=setTimeout(()=>{
-    el.style.animation='comboOut .3s ease forwards';
-    setTimeout(()=>{ el.style.display='none'; el.style.animation=''; },320);
-  },1800);
+let cTimer=null;
+function showCombo(msg,evtId){
+  const el=document.getElementById('cpop');
+  const ev=evtId?EVENTS.find(e=>e.id===evtId):null;
+  el.style.background=ev?ev.col:'linear-gradient(135deg,#FF6B35,#FFD700)';
+  el.textContent=msg;el.style.display='block';
+  el.style.animation='cin .34s cubic-bezier(.34,1.56,.64,1) forwards';
+  clearTimeout(cTimer);
+  cTimer=setTimeout(()=>{el.style.animation='cout .3s ease forwards';setTimeout(()=>{el.style.display='none';el.style.animation='';},310);},1800);
 }
-
-// ═══════════════ TOAST ═══════════════
 function toast(msg){
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.classList.add('show');
-  clearTimeout(el._t);
-  el._t=setTimeout(()=>el.classList.remove('show'),2400);
+  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2500);
 }
 
-// ═══════════════ ENERGY TICK ═══════════════
+// ════════ TICK ════════
 function tick(){
-  if(S.energy<MAX_ENERGY){
-    const elapsed=Date.now()-S.lastEnergy;
-    if(elapsed>=REGEN_MS){
-      const gain=Math.floor(elapsed/REGEN_MS);
-      S.energy=Math.min(MAX_ENERGY,S.energy+gain);
-      S.lastEnergy=Date.now();
-      save();
-    }
+  if(S.energy<MAX_E){
+    const rm=S.activeEvt==='ener'?REGEN_MS/5:REGEN_MS;
+    const el=Date.now()-S.lastEnergy;
+    if(el>=rm){S.energy=Math.min(MAX_E,S.energy+Math.floor(el/rm));S.lastEnergy=Date.now();save();}
   }
-  renderHUD();
-  renderEnergy();
+  tickEvents();
+  renderHUD();renderEvtBanner();
 }
 
-// ═══════════════ SERVICE WORKER ═══════════════
-if('serviceWorker' in navigator){
+// ════════ SERVICE WORKER ════════
+if('serviceWorker' in navigator)
   window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-}
 
-// ═══════════════ BOOT ═══════════════
-load();
-computeSize();
-render();
-checkDaily();
-setInterval(tick, 1000);
-window.addEventListener('resize', ()=>{ computeSize(); render(); });
+// ════════ BOOT ════════
+load();computeSize();render();checkDaily();
+setInterval(tick,1000);
+window.addEventListener('resize',()=>{computeSize();render();});
 </script>
 </body>
 </html>
