@@ -12,134 +12,113 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none}
 html,body{height:100%;overflow:hidden}
-body{
-  font-family:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
+body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
   background:linear-gradient(168deg,#4BA8E8 0%,#7EC87A 48%,#336620 100%);
   display:flex;flex-direction:column;align-items:center;
-  height:100vh;height:100dvh;
-}
+  height:100vh;height:100dvh;transition:background .3s}
 
-/* ── TOP HUD ── */
-#hud{
-  width:100%;max-width:460px;flex-shrink:0;
-  padding:10px 10px 0;display:flex;flex-direction:column;gap:5px;
-}
-#hud-top{display:flex;gap:5px}
-.hc{
-  flex:1;background:rgba(0,0,0,.40);backdrop-filter:blur(12px);
-  border-radius:16px;padding:6px 10px;
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  color:#fff;font-weight:700;font-size:13px;
-}
-.hc.gem{border:1.5px solid rgba(200,120,255,.45)}
-.hc.pop{border:1.5px solid rgba(120,220,120,.35)}
+/* SCREEN SHAKE */
+@keyframes shake{0%,100%{transform:translate(0,0) rotate(0)}15%{transform:translate(-6px,-2px) rotate(-.5deg)}30%{transform:translate(6px,2px) rotate(.5deg)}45%{transform:translate(-4px,-1px)}60%{transform:translate(4px,1px)}75%{transform:translate(-2px,0)}90%{transform:translate(2px,0)}}
+body.shake{animation:shake .42s ease}
+
+/* ── HUD ── */
+#hud{width:100%;max-width:460px;flex-shrink:0;padding:9px 10px 0;display:flex;flex-direction:column;gap:4px}
+#hud-r1{display:flex;gap:5px}
+.hc{flex:1;background:rgba(0,0,0,.40);backdrop-filter:blur(12px);border-radius:16px;padding:6px 8px;display:flex;align-items:center;justify-content:center;gap:4px;color:#fff;font-weight:700;font-size:13px}
+.hc.gem{border:1.5px solid rgba(200,120,255,.45)}.hc.pop{border:1.5px solid rgba(120,220,120,.35)}
 .gv{color:#CE93D8}.pv{color:#A5D6A7}
-/* energy row */
-#ebar-row{
-  background:rgba(0,0,0,.32);backdrop-filter:blur(8px);
-  border-radius:13px;padding:6px 12px;
-  display:flex;align-items:center;gap:8px;
-}
+#ebar-row{background:rgba(0,0,0,.32);backdrop-filter:blur(8px);border-radius:12px;padding:5px 11px;display:flex;align-items:center;gap:7px}
 .el{font-size:12px;color:#FFE082;font-weight:700;white-space:nowrap}
 #ebg{flex:1;height:10px;background:rgba(255,255,255,.18);border-radius:5px;overflow:hidden}
 #efg{height:100%;background:linear-gradient(90deg,#FFB300,#FFE066);border-radius:5px;transition:width .4s;box-shadow:0 0 6px rgba(255,180,0,.55)}
 #ecnt{font-size:12px;color:#FFE082;font-weight:700;white-space:nowrap}
-#etmr{font-size:11px;color:rgba(255,255,255,.5);white-space:nowrap;min-width:32px;text-align:right}
+#etmr{font-size:10px;color:rgba(255,255,255,.5);white-space:nowrap;min-width:30px;text-align:right}
 
 /* ── EVENT BANNER ── */
 #evt-wrap{width:100%;max-width:460px;flex-shrink:0;padding:0 10px}
-.evb{border-radius:11px;padding:6px 12px;margin-bottom:4px;
-  display:flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.2)}
-.evb .ei{font-size:17px;flex-shrink:0}
-.evb .en{font-size:12px;font-weight:800;color:#fff}
-.evb .ed{font-size:10px;color:rgba(255,255,255,.8)}
-.evb .et{font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.evb{border-radius:11px;padding:6px 11px;margin-bottom:4px;display:flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.22)}
+.evb .ei{font-size:17px;flex-shrink:0}.evb .en{font-size:12px;font-weight:800;color:#fff}.evb .ed{font-size:10px;color:rgba(255,255,255,.82)}.evb .et{font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
 @keyframes eslide{from{transform:translateY(-35px);opacity:0}to{transform:translateY(0);opacity:1}}
 .eslide{animation:eslide .38s cubic-bezier(.34,1.4,.64,1)}
 
-/* ── ORDERS STRIP ── */
-#orders-wrap{
-  width:100%;max-width:460px;flex-shrink:0;padding:0 10px 4px;
-}
-#orders-inner{display:flex;gap:7px}
-.ord{
-  flex:1;background:linear-gradient(145deg,#FFF8DC,#FFE8A0);
-  border:2px solid #D4A020;border-radius:14px;padding:6px 6px 7px;
-  text-align:center;position:relative;min-width:0;
-}
-.ord .char{font-size:20px;line-height:1}
-.ord .bname{font-size:9px;color:#888;font-weight:600;margin:2px 0 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ord .bemo{font-size:22px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
-.ord .rwd{font-size:9px;font-weight:700;color:#D4820A;margin:2px 0;line-height:1.4}
-.ord .dbtn{
-  width:100%;border:none;border-radius:8px;padding:4px 0;
-  font-size:10px;font-weight:800;cursor:pointer;color:#fff;
-}
-.ord .dbtn.ready{background:linear-gradient(135deg,#4CAF50,#2E7D32);box-shadow:0 2px 6px rgba(46,125,50,.4)}
-.ord .dbtn.noready{background:#C0C0C0;color:#888;cursor:default}
-.ord .lv-tag{
-  position:absolute;top:4px;right:5px;
-  font-size:9px;font-weight:800;color:#fff;
-  background:rgba(0,0,0,.4);border-radius:5px;padding:1px 4px;
-}
+/* ── CHARACTER ORDERS ── */
+#orders-wrap{width:100%;max-width:460px;flex-shrink:0;padding:0 10px 4px}
+#orders-row{display:flex;gap:6px}
+.ord{flex:1;min-width:0;background:linear-gradient(145deg,#FFF8DC,#FFE8A0);border:2px solid #D4A020;border-radius:13px;padding:6px 5px;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative;overflow:hidden}
+.ord.evt-char{border-color:#FF6B35;background:linear-gradient(145deg,#FFF3E0,#FFD8A0);animation:charGlow 1.5s ease infinite}
+@keyframes charGlow{0%,100%{box-shadow:0 0 0 rgba(255,107,53,0)}50%{box-shadow:0 0 10px rgba(255,107,53,.5)}}
+.ord .cface{font-size:20px;line-height:1}
+.ord .cname{font-size:8px;color:#6D4C10;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;text-align:center}
+.ord .hearts{font-size:9px;color:#E74C3C;letter-spacing:0px}
+.ord .bubble{background:#fff;border-radius:8px;padding:2px 5px;font-size:8px;color:#555;font-style:italic;position:relative;max-width:100%;text-align:center;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ord .bubble::after{content:'';position:absolute;bottom:-4px;left:10px;border-left:3px solid transparent;border-right:3px solid transparent;border-top:4px solid #fff}
+.ord .bemo{font-size:21px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+.ord .rwd{font-size:9px;font-weight:700;color:#C46A00;line-height:1.4;text-align:center}
+.ord .dbtn{width:100%;border:none;border-radius:8px;padding:4px 0;font-size:10px;font-weight:800;cursor:pointer;color:#fff;margin-top:1px}
+.ord .dbtn.rdy{background:linear-gradient(135deg,#4CAF50,#2E7D32);box-shadow:0 2px 6px rgba(46,125,50,.4)}
+.ord .dbtn.rdy:active{transform:scale(.95)}
+.ord .dbtn.nrdy{background:#C8C8C8;color:#888;cursor:default}
+.ord .lv-tag{position:absolute;top:4px;right:4px;font-size:8px;font-weight:900;color:#fff;background:rgba(0,0,0,.4);border-radius:4px;padding:1px 3px}
+.ord .x3-tag{position:absolute;top:4px;left:4px;font-size:8px;font-weight:900;color:#fff;background:#FF5722;border-radius:4px;padding:1px 3px}
 
 /* ── GRID ── */
-#gwrap{
-  width:100%;max-width:460px;flex:1;min-height:0;
-  display:flex;align-items:center;justify-content:center;
-  padding:2px 10px;
-}
-#grid{
-  display:grid;grid-template-columns:repeat(5,1fr);
-  gap:5px;padding:9px;width:100%;
-  background:rgba(50,22,4,.72);
-  border-radius:20px;border:3px solid #5C2C08;
-  box-shadow:0 8px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08);
-}
-.cell{
-  aspect-ratio:1;background:rgba(255,255,255,.08);
-  border-radius:11px;display:flex;align-items:center;justify-content:center;
-  position:relative;border:1.5px solid rgba(255,255,255,.06);
-  transition:border-color .12s,background .12s;overflow:hidden;
-}
-.cell.filled{background:rgba(255,255,255,.16)}
+#gwrap{width:100%;max-width:460px;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:2px 10px}
+#grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:9px;width:100%;background:rgba(50,22,4,.72);border-radius:20px;border:3px solid #5C2C08;box-shadow:0 8px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+
+/* CELLS */
+.cell{aspect-ratio:1;background:rgba(255,255,255,.09);border-radius:11px;display:flex;align-items:center;justify-content:center;position:relative;border:1.5px solid rgba(255,255,255,.07);transition:border-color .12s,background .12s;overflow:hidden}
+.cell.filled{background:rgba(255,255,255,.17)}
 .cell.hl-merge{border-color:#FFD700!important;background:rgba(255,215,0,.24)!important;box-shadow:0 0 16px rgba(255,215,0,.7)!important}
 .cell.hl-move{border-color:#A5D6A7!important;background:rgba(165,214,167,.15)!important}
 .cell.drag-src{opacity:.25}
+.cell.match{animation:matchP 1s ease infinite}
+@keyframes matchP{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 3px #4CAF50,0 0 8px rgba(76,175,80,.4)}}
 
-/* ── ITEM CARD ── */
-.item{
-  width:90%;height:90%;border-radius:9px;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-}
+/* ITEM CARDS */
+.item{width:90%;height:90%;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .item .emo{font-size:1.82em;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));z-index:1}
 .item .nm{font-size:8px;font-weight:700;color:rgba(255,255,255,.85);margin-top:2px;line-height:1;text-shadow:0 1px 3px rgba(0,0,0,.8);z-index:1}
-.item .lv{position:absolute;bottom:2px;right:3px;font-size:9px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,1);background:rgba(0,0,0,.55);border-radius:4px;padding:1px 3px;z-index:2}
-/* tiers */
-.t1{border:2px solid #C87430;box-shadow:inset 0 0 8px rgba(200,116,48,.2)}
-.t2{border:2px solid #8AA8C0;box-shadow:inset 0 0 10px rgba(138,168,192,.25),0 0 5px rgba(138,168,192,.2)}
-.t3{border:2px solid #FFD700;animation:gglow 2s ease infinite}
-@keyframes gglow{0%,100%{box-shadow:inset 0 0 10px rgba(255,215,0,.25),0 0 8px rgba(255,215,0,.3)}50%{box-shadow:inset 0 0 16px rgba(255,215,0,.5),0 0 14px rgba(255,215,0,.5)}}
-.t4{border:2px solid #FF6B6B;animation:rbdr 1.5s linear infinite}
-@keyframes rbdr{
+.item .lv{position:absolute;bottom:2px;right:3px;font-size:9px;font-weight:900;color:#fff;text-shadow:0 1px 3px #000;background:rgba(0,0,0,.55);border-radius:4px;padding:1px 3px;z-index:2}
+/* Tier 1 – Bronze */
+.t1{border:2px solid #C87430;box-shadow:inset 0 0 8px rgba(200,116,48,.22)}
+/* Tier 2 – Silver */
+.t2{border:2px solid #9ABACC;box-shadow:inset 0 0 10px rgba(154,186,204,.26),0 0 5px rgba(154,186,204,.22)}
+/* Tier 3 – Gold */
+.t3{border:2px solid #FFD700;animation:gg 2.2s ease infinite}
+@keyframes gg{0%,100%{box-shadow:inset 0 0 10px rgba(255,215,0,.25),0 0 8px rgba(255,215,0,.32)}50%{box-shadow:inset 0 0 16px rgba(255,215,0,.52),0 0 14px rgba(255,215,0,.52)}}
+/* Tier 4 – Diamond */
+.t4{border:2px solid #FF6B6B;animation:rb 1.5s linear infinite}
+@keyframes rb{
   0%  {border-color:#FF6B6B;box-shadow:inset 0 0 14px rgba(255,107,107,.28),0 0 12px rgba(255,107,107,.42)}
   25% {border-color:#FFD700;box-shadow:inset 0 0 14px rgba(255,215,0,.28),0 0 12px rgba(255,215,0,.42)}
   50% {border-color:#4ECDC4;box-shadow:inset 0 0 14px rgba(78,205,196,.28),0 0 12px rgba(78,205,196,.42)}
   75% {border-color:#C084FC;box-shadow:inset 0 0 14px rgba(192,132,252,.28),0 0 12px rgba(192,132,252,.42)}
-  100%{border-color:#FF6B6B;box-shadow:inset 0 0 14px rgba(255,107,107,.28),0 0 12px rgba(255,107,107,.42)}
-}
+  100%{border-color:#FF6B6B;box-shadow:inset 0 0 14px rgba(255,107,107,.28),0 0 12px rgba(255,107,107,.42)}}
 .gen-item{background:rgba(20,80,20,.45)!important;border:2px solid rgba(80,180,60,.45)!important}
-/* animations */
-@keyframes popA{0%{transform:scale(1)}42%{transform:scale(1.44)}100%{transform:scale(1)}}
+/* Pop & shine */
+@keyframes popA{0%{transform:scale(1)}42%{transform:scale(1.45)}100%{transform:scale(1)}}
 .pop .item{animation:popA .34s cubic-bezier(.36,.07,.19,.97)}
 @keyframes shA{0%{left:-120%}100%{left:220%}}
-.item::before{content:'';position:absolute;top:0;left:-120%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg);pointer-events:none;z-index:3}
+.item::before{content:'';position:absolute;top:0;left:-120%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);transform:skewX(-20deg);pointer-events:none;z-index:3}
 .item.sh::before{animation:shA .5s ease}
-/* deliver flash on matching cell */
-@keyframes matchPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 3px #4CAF50}}
-.cell.match{animation:matchPulse 1s ease infinite}
+
+/* ── IMPACT TEXTS ── */
+@keyframes impactIn{0%{transform:translateX(-50%) scale(.2) rotate(-8deg);opacity:0}65%{transform:translateX(-50%) scale(1.18) rotate(2deg)}100%{transform:translateX(-50%) scale(1) rotate(0);opacity:1}}
+@keyframes impactOut{to{transform:translateX(-50%) scale(1.4) rotate(3deg);opacity:0}}
+.impact-txt{position:fixed;left:50%;transform:translateX(-50%);pointer-events:none;z-index:760;font-weight:900;white-space:nowrap;animation:impactIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
+
+@keyframes legIn{0%{transform:translateX(-50%) scale(.1) rotate(-15deg);opacity:0}55%{transform:translateX(-50%) scale(1.25) rotate(4deg);opacity:1}75%{transform:translateX(-50%) scale(.92) rotate(-2deg)}100%{transform:translateX(-50%) scale(1) rotate(0);opacity:1}}
+@keyframes legOut{to{transform:translateX(-50%) scale(1.6);opacity:0}}
+.leg-txt{position:fixed;top:32%;left:50%;transform:translateX(-50%);pointer-events:none;z-index:760;font-size:42px;font-weight:900;background:linear-gradient(135deg,#FFD700,#FF8C00,#FF6B6B,#C084FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5));white-space:nowrap;animation:legIn .5s cubic-bezier(.34,1.56,.64,1) forwards}
+
+/* ── SCREEN FLASH ── */
+#flash{position:fixed;inset:0;pointer-events:none;z-index:755;opacity:0}
+@keyframes fla{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+#flash.do{animation:fla .45s ease forwards}
+
+/* ── PARTICLES ── */
+@keyframes pt{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+.pt{position:fixed;border-radius:50%;pointer-events:none;z-index:700;animation:pt var(--dur,.72s) ease forwards}
 
 /* ── BOTTOM ── */
 #bottom{width:100%;max-width:460px;flex-shrink:0;padding:4px 10px 10px;display:flex;gap:8px}
@@ -151,32 +130,21 @@ body{
 /* ── GHOST ── */
 #ghost{position:fixed;pointer-events:none;z-index:600;width:56px;height:56px;border-radius:11px;align-items:center;justify-content:center;font-size:1.9em;filter:drop-shadow(0 6px 12px rgba(0,0,0,.6));transform:scale(1.26);display:none}
 
-/* ── PARTICLES ── */
-@keyframes pt{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
-.pt{position:fixed;border-radius:50%;pointer-events:none;z-index:700;animation:pt .72s ease forwards}
-
 /* ── SHOP ── */
 #shop-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:800;display:flex;align-items:flex-end;justify-content:center}
 #shop-ov.hidden{display:none!important}
 .sheet{width:100%;max-width:460px;background:#FFFBF2;border-radius:24px 24px 0 0;padding:18px 14px 28px;max-height:78vh;overflow-y:auto}
 .shd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.stitle{font-size:18px;font-weight:900;color:#333}
-.sbal{display:flex;gap:10px;font-size:13px;font-weight:700}
-.sc{color:#E67E22}.sg{color:#8E44AD}
+.stitle{font-size:18px;font-weight:900;color:#333}.sbal{display:flex;gap:10px;font-size:13px;font-weight:700}.sc{color:#E67E22}.sg{color:#8E44AD}
 #stabs{display:flex;gap:6px;margin-bottom:11px}
 .stab{flex:1;padding:8px;border:2px solid #E0D5C8;border-radius:12px;background:#fff;font-size:13px;font-weight:700;cursor:pointer;color:#666}
 .stab.on{background:linear-gradient(135deg,#FF8C00,#FFD700);border-color:transparent;color:#fff}
 .stab.gtab.on{background:linear-gradient(135deg,#6A1B9A,#CE93D8)}
 .si{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;margin-bottom:7px;border-radius:14px;border:2px solid #EAE0D0;background:#fff;cursor:pointer;text-align:left}
-.si:active{background:#FAF3E8}
-.si.gi{border-color:#E8D4F0;background:#FAF0FF}
-.si.gi:active{background:#F0E0FF}
-.sico{font-size:22px;flex-shrink:0}
-.sinfo{flex:1;display:flex;flex-direction:column;gap:1px}
-.sname{font-size:13px;font-weight:800;color:#333}
-.sdesc{font-size:11px;color:#888}
-.sprice{font-weight:800;white-space:nowrap;font-size:13px}
-.pc{color:#E67E22}.pg{color:#8E44AD}
+.si:active{background:#FAF3E8}.si.gi{border-color:#E8D4F0;background:#FAF0FF}.si.gi:active{background:#F0E0FF}
+.sico{font-size:22px;flex-shrink:0}.sinfo{flex:1;display:flex;flex-direction:column;gap:1px}
+.sname{font-size:13px;font-weight:800;color:#333}.sdesc{font-size:11px;color:#888}
+.sprice{font-weight:800;white-space:nowrap;font-size:13px}.pc{color:#E67E22}.pg{color:#8E44AD}
 #freebtn{width:100%;padding:11px;border:2px dashed #9B59B6;border-radius:14px;background:#FAF0FF;font-size:13px;font-weight:800;color:#7D3C98;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:7px}
 #freebtn:disabled{opacity:.45;cursor:default}
 .sclose{width:100%;padding:12px;border:none;border-radius:14px;background:#E0D5C8;font-size:16px;font-weight:700;cursor:pointer;margin-top:4px;color:#666}
@@ -188,33 +156,36 @@ body{
 /* new building */
 .nbc{background:linear-gradient(145deg,#FFFDE7,#FFF9C4);border-radius:28px;padding:26px 22px;text-align:center;max-width:270px;width:86%;box-shadow:0 20px 60px rgba(0,0,0,.55);animation:ppin .44s cubic-bezier(.34,1.56,.64,1);border:3px solid #FFD700}
 .nbtag{background:linear-gradient(135deg,#FF8C00,#FFD700);color:#fff;font-size:11px;font-weight:900;border-radius:20px;padding:4px 14px;display:inline-block;margin-bottom:10px}
-.nbemo{font-size:68px;line-height:1;margin:4px 0 6px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
+.nbemo{font-size:66px;line-height:1;margin:4px 0 6px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
 .nbname{font-size:22px;font-weight:900;color:#333;margin-bottom:3px}
 .nblv{font-size:13px;color:#888;margin-bottom:16px}
 .nbbtn{background:linear-gradient(135deg,#FFD700,#FF8C00);border:none;border-radius:20px;padding:12px;color:#fff;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(255,140,0,.5);width:100%}
 /* daily */
 .dcard{background:linear-gradient(145deg,#E8F5E9,#C8E6C9);border-radius:28px;padding:26px 22px;text-align:center;max-width:270px;width:86%;box-shadow:0 20px 60px rgba(0,0,0,.55);animation:ppin .44s cubic-bezier(.34,1.56,.64,1);border:3px solid #4CAF50}
-.dtitle{font-size:20px;font-weight:900;color:#1B5E20;margin-bottom:5px}
-.dsub{font-size:13px;color:#388E3C;margin-bottom:13px}
+.dtitle{font-size:20px;font-weight:900;color:#1B5E20;margin-bottom:5px}.dsub{font-size:13px;color:#388E3C;margin-bottom:13px}
 .drwd{font-size:22px;font-weight:900;color:#E65100;margin-bottom:16px;line-height:1.6}
 .dbtn{background:linear-gradient(135deg,#4CAF50,#2E7D32);border:none;border-radius:20px;padding:12px;color:#fff;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(46,125,50,.4);width:100%}
 /* event popup */
 .ecard{background:linear-gradient(145deg,#FFF8E1,#FFF3CD);border-radius:24px;padding:22px;text-align:center;max-width:270px;width:86%;box-shadow:0 20px 60px rgba(0,0,0,.55);animation:ppin .4s cubic-bezier(.34,1.56,.64,1)}
-.eico2{font-size:56px;margin-bottom:6px}
-.ename{font-size:20px;font-weight:900;color:#333;margin-bottom:5px}
-.edesc{font-size:13px;color:#555;margin-bottom:4px}
-.edur{font-size:11px;color:#999;margin-bottom:14px}
+.eico2{font-size:56px;margin-bottom:6px}.ename{font-size:20px;font-weight:900;color:#333;margin-bottom:5px}
+.edesc{font-size:13px;color:#555;margin-bottom:4px}.edur{font-size:11px;color:#999;margin-bottom:14px}
 .eok{background:linear-gradient(135deg,#FF8C00,#FFD700);border:none;border-radius:20px;padding:12px;color:#fff;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(255,140,0,.5);width:100%}
+/* gift popup */
+.gcard{background:linear-gradient(145deg,#F3E5F5,#E1BEE7);border-radius:28px;padding:26px 22px;text-align:center;max-width:270px;width:86%;box-shadow:0 20px 60px rgba(0,0,0,.55);animation:ppin .44s cubic-bezier(.34,1.56,.64,1);border:3px solid #9C27B0}
+.gtitle{font-size:18px;font-weight:900;color:#6A1B9A;margin-bottom:5px}
+.gchar{font-size:52px;margin:8px 0 6px}
+.gsub{font-size:13px;color:#7B1FA2;margin-bottom:10px}
+.grwd{font-size:24px;font-weight:900;color:#E65100;margin-bottom:16px;line-height:1.6}
+.gbtn{background:linear-gradient(135deg,#9C27B0,#6A1B9A);border:none;border-radius:20px;padding:12px;color:#fff;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(106,27,154,.4);width:100%}
 
 /* ── COMBO ── */
 @keyframes cin{0%{transform:translateX(-50%) scale(.35);opacity:0}65%{transform:translateX(-50%) scale(1.15)}100%{transform:translateX(-50%) scale(1);opacity:1}}
 @keyframes cout{to{transform:translateX(-50%) scale(.7) translateY(-12px);opacity:0}}
-#cpop{position:fixed;top:108px;left:50%;transform:translateX(-50%);color:#fff;font-size:15px;font-weight:900;border-radius:30px;padding:8px 22px;z-index:700;pointer-events:none;white-space:nowrap;display:none}
+#cpop{position:fixed;top:110px;left:50%;transform:translateX(-50%);color:#fff;font-size:15px;font-weight:900;border-radius:30px;padding:8px 22px;z-index:700;pointer-events:none;white-space:nowrap;display:none}
 
 /* ── TOAST ── */
 #toast{position:fixed;bottom:106px;left:50%;transform:translateX(-50%);background:rgba(12,12,12,.88);color:#fff;padding:10px 20px;border-radius:24px;font-size:13px;z-index:950;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .25s;max-width:90%;text-align:center}
 #toast.show{opacity:1}
-
 /* ── FLOAT ── */
 .flt{position:fixed;pointer-events:none;font-size:16px;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.7);z-index:650;animation:fup .88s ease forwards}
 @keyframes fup{0%{opacity:1;transform:translateY(0) scale(1)}55%{opacity:1;transform:translateY(-32px) scale(1.2)}100%{opacity:0;transform:translateY(-56px) scale(.9)}}
@@ -224,9 +195,11 @@ body{
 </head>
 <body>
 
+<div id="flash"></div>
+
 <!-- HUD -->
 <div id="hud">
-  <div id="hud-top">
+  <div id="hud-r1">
     <div class="hc">🪙 <span id="vcoin">0</span></div>
     <div class="hc gem">💎 <span id="vgem" class="gv">0</span></div>
     <div class="hc pop">🏘️ <span id="vpop" class="pv">0</span></div>
@@ -242,10 +215,8 @@ body{
 <!-- Event banner -->
 <div id="evt-wrap"></div>
 
-<!-- Orders -->
-<div id="orders-wrap">
-  <div id="orders-inner"></div>
-</div>
+<!-- Character Orders -->
+<div id="orders-wrap"><div id="orders-row"></div></div>
 
 <!-- Grid -->
 <div id="gwrap"><div id="grid"></div></div>
@@ -264,7 +235,7 @@ body{
   <div class="sheet">
     <div class="shd">
       <span class="stitle">🏪 상점</span>
-      <span class="sbal"><span class="sc">🪙 <span id="shcoin">0</span></span><span class="sg">💎 <span id="shgem">0</span></span></span>
+      <span class="sbal"><span class="sc">🪙<span id="shc">0</span></span> <span class="sg">💎<span id="shg">0</span></span></span>
     </div>
     <div id="stabs">
       <button class="stab on" onclick="switchTab('coin')">🪙 코인</button>
@@ -276,236 +247,285 @@ body{
 </div>
 
 <!-- New Building -->
-<div id="nb-ov" class="pov hidden">
-  <div class="nbc">
-    <div class="nbtag">✨ 새 건물 발견!</div>
-    <div class="nbemo" id="nbemo">🏠</div>
-    <div class="nbname" id="nbname">작은집</div>
-    <div class="nblv" id="nblv">레벨 3 · 실버</div>
-    <button class="nbbtn" onclick="closeNb()">계속 건설하기!</button>
-  </div>
-</div>
+<div id="nb-ov" class="pov hidden"><div class="nbc">
+  <div class="nbtag">✨ 새 건물 발견!</div>
+  <div class="nbemo" id="nbemo">🏠</div>
+  <div class="nbname" id="nbname">작은집</div>
+  <div class="nblv" id="nblv">레벨 3 · 실버</div>
+  <button class="nbbtn" onclick="closeNb()">계속 건설하기!</button>
+</div></div>
 
 <!-- Daily -->
-<div id="daily-ov" class="pov hidden">
-  <div class="dcard">
-    <div class="dtitle">🌅 일일 보너스!</div>
-    <div class="dsub">오늘도 마을 건설 화이팅!</div>
-    <div class="drwd" id="drwd"></div>
-    <button class="dbtn" onclick="claimDaily()">받기! 🎉</button>
-  </div>
-</div>
+<div id="daily-ov" class="pov hidden"><div class="dcard">
+  <div class="dtitle">🌅 일일 보너스!</div>
+  <div class="dsub">오늘도 마을 건설 화이팅!</div>
+  <div class="drwd" id="drwd"></div>
+  <button class="dbtn" onclick="claimDaily()">받기! 🎉</button>
+</div></div>
 
 <!-- Event popup -->
-<div id="evt-ov" class="pov hidden">
-  <div class="ecard">
-    <div class="eico2" id="eico">🌟</div>
-    <div class="ename" id="ename">황금 시간!</div>
-    <div class="edesc" id="edesc">모든 머지 코인 2배!</div>
-    <div class="edur" id="edur">3분 지속</div>
-    <button class="eok" onclick="closeEvtPop()">지금 시작!</button>
-  </div>
-</div>
+<div id="evt-ov" class="pov hidden"><div class="ecard">
+  <div class="eico2" id="ep-ico">🌟</div>
+  <div class="ename" id="ep-name">황금 시간!</div>
+  <div class="edesc" id="ep-desc">코인 2배!</div>
+  <div class="edur" id="ep-dur">3분 지속</div>
+  <button class="eok" onclick="closeEvtPop()">지금 시작!</button>
+</div></div>
+
+<!-- Gift popup -->
+<div id="gift-ov" class="pov hidden"><div class="gcard">
+  <div class="gtitle">💝 우정 선물!</div>
+  <div class="gchar" id="gchar">👵</div>
+  <div class="gsub" id="gsub">할머니 김씨가 선물을 보냈어요!</div>
+  <div class="grwd" id="grwd">+500🪙<br>+10💎</div>
+  <button class="gbtn" onclick="closeGift()">감사히 받겠습니다!</button>
+</div></div>
 
 <div id="cpop"></div>
 <div id="toast"></div>
 
 <script>
 'use strict';
-
-// ════════ DATA ════════
+// ══════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════
 const BLDGS=[
-  {lv:1, n:'텐트',       e:'🏕️', g:'#D4A86A,#B07840', t:1, c:3    },
-  {lv:2, n:'오두막',     e:'🛖',  g:'#B07850,#8A5030', t:1, c:8    },
-  {lv:3, n:'작은집',     e:'🏠',  g:'#5BA4CF,#3880B8', t:1, c:20   },
-  {lv:4, n:'잔디집',     e:'🏡',  g:'#52A85C,#3D8E48', t:2, c:45   },
-  {lv:5, n:'타운하우스', e:'🏘️', g:'#E87030,#C05010', t:2, c:95   },
-  {lv:6, n:'공사중',     e:'🏗️', g:'#D4B020,#A88A10', t:2, c:200  },
-  {lv:7, n:'오피스',     e:'🏢',  g:'#4878C0,#2858A0', t:3, c:420  },
-  {lv:8, n:'상업빌딩',   e:'🏬',  g:'#7050C8,#5030A8', t:3, c:860  },
-  {lv:9, n:'고층빌딩',   e:'🏙️', g:'#2898C0,#1878A0', t:3, c:1750 },
-  {lv:10,n:'성',         e:'🏰',  g:'#C03030,#900A0A', t:4, c:3500 },
-  {lv:11,n:'타워',       e:'🗼',  g:'#C07018,#904A00', t:4, c:7000 },
-  {lv:12,n:'왕국',       e:'👑',  g:'#B09010,#806800', t:4, c:14000},
+  {lv:1, n:'텐트',        e:'🏕️', g:'#D4A86A,#B07840', t:1, c:3    },
+  {lv:2, n:'오두막',      e:'🛖',  g:'#B07850,#8A5030', t:1, c:8    },
+  {lv:3, n:'작은집',      e:'🏠',  g:'#5BA4CF,#3880B8', t:1, c:20   },
+  {lv:4, n:'잔디집',      e:'🏡',  g:'#52A85C,#3D8E48', t:2, c:45   },
+  {lv:5, n:'타운하우스',  e:'🏘️', g:'#E87030,#C05010', t:2, c:95   },
+  {lv:6, n:'공사중',      e:'🏗️', g:'#D4B020,#A88A10', t:2, c:200  },
+  {lv:7, n:'오피스',      e:'🏢',  g:'#4878C0,#2858A0', t:3, c:420  },
+  {lv:8, n:'상업빌딩',    e:'🏬',  g:'#7050C8,#5030A8', t:3, c:860  },
+  {lv:9, n:'고층빌딩',    e:'🏙️', g:'#2898C0,#1878A0', t:3, c:1750 },
+  {lv:10,n:'성',          e:'🏰',  g:'#C03030,#900A0A', t:4, c:3500 },
+  {lv:11,n:'타워',        e:'🗼',  g:'#C07018,#904A00', t:4, c:7000 },
+  {lv:12,n:'왕국',        e:'👑',  g:'#B09010,#806800', t:4, c:14000},
 ];
-const TIER_NAME=['','브론즈','실버','골드','다이아'];
-const MAX_LV=12,COLS=5,ROWS=7,SIZE=35;
-const REGEN_MS=30000,MAX_E=20;
+const TIER_N=['','브론즈','실버','골드','다이아'];
+const MAX_LV=12, COLS=5, ROWS=7, SIZE=35;
+const REGEN_MS=30000, MAX_E=20;
 
+// ── CHARACTERS ──
 const CHARS=[
-  {f:'👴',n:'김 할아버지'},{f:'👵',n:'이 할머니'},{f:'👨',n:'박 아저씨'},
-  {f:'👩',n:'최 아줌마'},{f:'👦',n:'정 소년'},{f:'👧',n:'강 소녀'},
-  {f:'🧑',n:'조씨'},{f:'👮',n:'경찰관'},{f:'👷',n:'건축가'},
-  {f:'🧑‍🍳',n:'요리사'},{f:'🧑‍🏫',n:'선생님'},{f:'🧙',n:'마법사'},
+  {id:0,f:'👵',n:'할머니 김씨',  phrases:["따뜻한 집 필요해요~","살기 좋은 마을이네요"],thanks:["고맙소, 젊은이!","오래오래 살 것 같아요"]},
+  {id:1,f:'👨',n:'이 아저씨',    phrases:["건물 좀 부탁해요","빨리 필요해요!"],thanks:["수고했어요!","잘 지었네요"]},
+  {id:2,f:'👦',n:'박 소년',      phrases:["건물 주세요!!","멋진 거 원해요!"],thanks:["최고예요!!","완전 대박!"]},
+  {id:3,f:'👧',n:'최 소녀',      phrases:["예쁜 집 원해요~","좋은 집 있나요?"],thanks:["감사해요~","너무 예뻐요!"]},
+  {id:4,f:'👮',n:'경찰관 정씨',  phrases:["마을 보안 필요해요","시설이 필요합니다"],thanks:["수고했어요!","마을이 안전해졌어요"]},
+  {id:5,f:'👷',n:'건축가 강씨',  phrases:["건물 자재 필요해요","품질이 중요해요"],thanks:["잘 지었어요!","훌륭한 건물이군요"]},
+  {id:6,f:'🧙',n:'마법사 조씨',  phrases:["마법 건물 필요..","뭔가 특별한 거요"],thanks:["신기하군요!","마법 같은 마을!"]},
+  {id:7,f:'🧑‍🍳',n:'셰프 윤씨',   phrases:["레스토랑 필요해요","맛집 거리 만들어요"],thanks:["맛있는 마을!","별점 5개!"]},
+  {id:8,f:'🧑‍🏫',n:'선생님 임씨', phrases:["교육 시설 필요해요","학교 세워봐요"],thanks:["훌륭합니다!","좋은 교육환경!"]},
+  {id:9,f:'🧑‍⚕️',n:'의사 한씨',  phrases:["의료 시설 필요해요","건강한 마을 원해요"],thanks:["고생했어요!","건강한 마을이에요"]},
 ];
 
+// ── EVENTS ──
 const EVENTS=[
-  {id:'gold', ico:'🌟',n:'황금 시간!',   d:'코인 2배로 획득!',         dur:180,col:'linear-gradient(135deg,#FF8C00,#E65100)'},
-  {id:'ener', ico:'⚡',n:'에너지 폭풍!', d:'에너지 5배 빠르게 충전!',  dur:120,col:'linear-gradient(135deg,#1565C0,#42A5F5)'},
-  {id:'luck', ico:'🍀',n:'럭키 타임!',   d:'머지마다 보석 +2!',         dur:150,col:'linear-gradient(135deg,#1B5E20,#66BB6A)'},
-  {id:'boom', ico:'🏗️',n:'건설 붐!',    d:'생성기가 Lv2 건물 생성!',  dur:180,col:'linear-gradient(135deg,#BF360C,#FF7043)'},
-  {id:'cmbo', ico:'🔥',n:'콤보 타임!',   d:'모든 머지 자동 콤보!',      dur:120,col:'linear-gradient(135deg,#880E4F,#F48FB1)'},
+  {id:'gold', ico:'🌟',n:'황금 시간!',       d:'모든 머지 코인 2배!',          dur:180,col:'linear-gradient(135deg,#FF8C00,#E65100)',bg:'rgba(255,200,0,.06)'},
+  {id:'ener', ico:'⚡',n:'에너지 폭풍!',     d:'에너지 5배 빠르게 충전!',      dur:120,col:'linear-gradient(135deg,#1565C0,#42A5F5)',bg:'rgba(66,165,245,.06)'},
+  {id:'luck', ico:'🍀',n:'럭키 타임!',       d:'머지마다 보석 +2!',             dur:150,col:'linear-gradient(135deg,#1B5E20,#66BB6A)',bg:'rgba(102,187,106,.06)'},
+  {id:'boom', ico:'🏗️',n:'건설 붐!',        d:'생성기가 Lv2 건물 생성!',      dur:180,col:'linear-gradient(135deg,#BF360C,#FF7043)',bg:'rgba(255,112,67,.06)'},
+  {id:'cmbo', ico:'🔥',n:'콤보 타임!',       d:'모든 머지 자동 콤보!',          dur:120,col:'linear-gradient(135deg,#880E4F,#F48FB1)',bg:'rgba(244,143,177,.06)'},
+  {id:'char', ico:'💝',n:'주민 감사 이벤트!',d:'모든 주문 보상 3배!',           dur:180,col:'linear-gradient(135deg,#6A1B9A,#CE93D8)',bg:'rgba(206,147,216,.06)'},
+  {id:'fest', ico:'🎊',n:'마을 축제!',       d:'모든 효과 동시 발동!',          dur:120,col:'linear-gradient(135deg,#FF6B35,#FFD700)',bg:'rgba(255,215,0,.08)'},
 ];
 
 const COIN_SHOP=[
-  {ico:'🏕️',n:'텐트',       d:'레벨 1 건물',      p:15,  a:'item',lv:1},
-  {ico:'🛖', n:'오두막',     d:'레벨 2 건물',      p:40,  a:'item',lv:2},
-  {ico:'🏠', n:'작은집',     d:'레벨 3 건물',      p:100, a:'item',lv:3},
-  {ico:'🎁', n:'미스터리 상자',d:'Lv1~4 랜덤!',   p:55,  a:'box'},
-  {ico:'🌳', n:'나무 추가',  d:'생성기 추가',      p:80,  a:'gen'},
-  {ico:'⚡', n:'에너지 +5',  d:'즉시 5 충전',      p:60,  a:'ecoin',v:5},
+  {ico:'🏕️',n:'텐트',        d:'레벨 1 건물',       p:15,  a:'item',lv:1},
+  {ico:'🛖', n:'오두막',      d:'레벨 2 건물',       p:40,  a:'item',lv:2},
+  {ico:'🏠', n:'작은집',      d:'레벨 3 건물',       p:100, a:'item',lv:3},
+  {ico:'🎁', n:'미스터리 상자',d:'Lv1~4 랜덤!',      p:55,  a:'box'},
+  {ico:'🌳', n:'나무 추가',   d:'생성기 추가',        p:80,  a:'gen'},
+  {ico:'⚡', n:'에너지 +5',   d:'즉시 5 충전',        p:60,  a:'ecoin',v:5},
 ];
 const GEM_SHOP=[
-  {ico:'⚡', n:'에너지 완충',  d:'에너지 가득 채워요',     p:8,  a:'efull'},
-  {ico:'🏠', n:'작은집',       d:'레벨 3 즉시 획득',       p:5,  a:'item',lv:3},
-  {ico:'🎰', n:'럭키 스핀',    d:'Lv5~9 랜덤 건물!',       p:15, a:'spin'},
-  {ico:'🏗️',n:'공사중',       d:'레벨 6 즉시 획득',       p:20, a:'item',lv:6},
-  {ico:'🌟', n:'특별 건물',    d:'Lv7~10 랜덤 건물!',      p:35, a:'spec'},
-  {ico:'⚡', n:'에너지 +20',   d:'에너지 20 즉시 추가',    p:12, a:'egem',v:20},
+  {ico:'⚡', n:'에너지 완충', d:'에너지 가득 채워요', p:8,  a:'efull'},
+  {ico:'🏠', n:'작은집',     d:'레벨 3 즉시 획득',   p:5,  a:'item',lv:3},
+  {ico:'🎰', n:'럭키 스핀',  d:'Lv5~9 랜덤 건물!',   p:15, a:'spin'},
+  {ico:'🏗️',n:'공사중',     d:'레벨 6 즉시 획득',   p:20, a:'item',lv:6},
+  {ico:'🌟', n:'특별 건물',  d:'Lv7~10 랜덤!',       p:35, a:'spec'},
+  {ico:'⚡', n:'에너지 +20', d:'에너지 20 즉시',      p:12, a:'egem',v:20},
 ];
 
-// ════════ STATE ════════
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
 let S={
   grid:Array(SIZE).fill(null),
-  coins:200,gems:100,energy:MAX_E,
-  population:0,maxLv:1,
+  coins:200, gems:100, energy:MAX_E, population:0, maxLv:1,
   lastEnergy:Date.now(),
+  charRel:Array(10).fill(0),   // relationship 0-10 per character
   discovered:[1],
   orders:[],
-  lastFreeGems:0,
-  lastDaily:null,
-  activeEvt:null,evtEnd:0,nextEvt:Date.now()+60000,
+  lastFreeGems:0, lastDaily:null,
+  activeEvt:null, evtEnd:0, nextEvt:Date.now()+90000,
   sell:false,
 };
-let comboTimes=[];
-let shopTab='coin';
+let comboTimes=[], shopTab='coin';
 
-// ════════ VIB ════════
+// ══════════════════════════════════════════
+//  VIBRATION (tiered)
+// ══════════════════════════════════════════
+function vib(pattern){ try{navigator.vibrate?.(pattern)}catch(e){} }
 const V={
-  merge:()=>navigator.vibrate?.([28]),
-  newBldg:()=>navigator.vibrate?.([55,30,55,30,90]),
-  deliver:()=>navigator.vibrate?.([80,40,120,40,160]),
-  event:()=>navigator.vibrate?.([70,35,70,35,110]),
-  daily:()=>navigator.vibrate?.([120,55,180]),
-  max:()=>navigator.vibrate?.([180,70,180,70,350]),
-  buy:()=>navigator.vibrate?.([40]),
+  t1:()=>vib([28]),
+  t2:()=>vib([45]),
+  t3:()=>vib([70]),
+  t4:()=>vib([100,40,100,40,160]),
+  deliver:()=>vib([60,30,100,30,140]),
+  event:()=>vib([70,35,70,35,110]),
+  gift:()=>vib([200,80,200,80,300]),
+  daily:()=>vib([120,55,180]),
+  max:()=>vib([200,70,200,70,400]),
+  buy:()=>vib([35]),
+  combo:()=>vib([50,25,50]),
+  superCombo:()=>vib([80,30,80,30,120]),
 };
 
-// ════════ SAVE/LOAD ════════
+// ══════════════════════════════════════════
+//  SAVE / LOAD
+// ══════════════════════════════════════════
 function save(){
-  localStorage.setItem('mt6',JSON.stringify({
-    grid:S.grid,coins:S.coins,gems:S.gems,energy:S.energy,
-    population:S.population,maxLv:S.maxLv,lastEnergy:S.lastEnergy,
-    discovered:S.discovered,orders:S.orders,lastFreeGems:S.lastFreeGems,
-    lastDaily:S.lastDaily,
-    activeEvt:S.activeEvt,evtEnd:S.evtEnd,nextEvt:S.nextEvt,
+  localStorage.setItem('mt7',JSON.stringify({
+    grid:S.grid, coins:S.coins, gems:S.gems, energy:S.energy,
+    population:S.population, maxLv:S.maxLv, lastEnergy:S.lastEnergy,
+    charRel:S.charRel, discovered:S.discovered, orders:S.orders,
+    lastFreeGems:S.lastFreeGems, lastDaily:S.lastDaily,
+    activeEvt:S.activeEvt, evtEnd:S.evtEnd, nextEvt:S.nextEvt,
   }));
 }
 function load(){
   try{
-    const raw=localStorage.getItem('mt6');
+    const raw=localStorage.getItem('mt7');
     if(!raw) return initNew();
     const d=JSON.parse(raw);
     S.grid=d.grid??Array(SIZE).fill(null);
-    S.coins=d.coins??200;S.gems=d.gems??100;
-    S.energy=d.energy??MAX_E;S.population=d.population??0;
-    S.maxLv=d.maxLv??1;S.lastEnergy=d.lastEnergy??Date.now();
-    S.discovered=d.discovered??[1];S.orders=d.orders??[];
-    S.lastFreeGems=d.lastFreeGems??0;S.lastDaily=d.lastDaily??null;
-    S.activeEvt=d.activeEvt??null;S.evtEnd=d.evtEnd??0;
-    S.nextEvt=d.nextEvt??Date.now()+60000;
+    S.coins=d.coins??200; S.gems=d.gems??100;
+    S.energy=d.energy??MAX_E; S.population=d.population??0;
+    S.maxLv=d.maxLv??1; S.lastEnergy=d.lastEnergy??Date.now();
+    S.charRel=d.charRel??Array(10).fill(0);
+    S.discovered=d.discovered??[1]; S.orders=d.orders??[];
+    S.lastFreeGems=d.lastFreeGems??0; S.lastDaily=d.lastDaily??null;
+    S.activeEvt=d.activeEvt??null; S.evtEnd=d.evtEnd??0;
+    S.nextEvt=d.nextEvt??Date.now()+90000;
     const gain=Math.floor((Date.now()-S.lastEnergy)/REGEN_MS);
     if(gain>0){S.energy=Math.min(MAX_E,S.energy+gain);S.lastEnergy=Date.now();}
-    if(S.orders.length<3) fillOrders();
+    while(S.orders.length<3) S.orders.push(makeOrder());
   }catch(e){initNew();}
 }
 function initNew(){
   S.grid=Array(SIZE).fill(null);
-  // 3 generators, 6 level-1, 2 level-2
   [0,5,10].forEach(i=>S.grid[i]={gen:true});
   [2,3,7,8,12,13].forEach(i=>S.grid[i]={lv:1});
   [16,17].forEach(i=>S.grid[i]={lv:2});
-  S.coins=200;S.gems=100;S.energy=MAX_E;
-  S.population=0;S.maxLv=2;S.discovered=[1,2];
-  S.orders=[];S.lastFreeGems=0;S.lastDaily=null;
-  S.activeEvt=null;S.evtEnd=0;S.nextEvt=Date.now()+90000;
+  S.coins=200; S.gems=100; S.energy=MAX_E;
+  S.population=0; S.maxLv=2;
+  S.charRel=Array(10).fill(0);
+  S.discovered=[1,2]; S.orders=[];
+  S.lastFreeGems=0; S.lastDaily=null;
+  S.activeEvt=null; S.evtEnd=0; S.nextEvt=Date.now()+90000;
   S.lastEnergy=Date.now();
-  fillOrders();
-}
-
-// ════════ ORDERS ════════
-function makeOrder(){
-  const maxReq=Math.min(MAX_LV, Math.max(2, S.maxLv+1));
-  const minReq=Math.max(1, S.maxLv-1);
-  const lv=minReq+Math.floor(Math.random()*(maxReq-minReq+1));
-  const char=CHARS[Math.floor(Math.random()*CHARS.length)];
-  const coins=Math.round(BLDGS[lv-1].c*3.5);
-  const gems=lv>=4?Math.floor(lv/3):0;
-  return{id:Date.now()+Math.random(),lv,char,coins,gems};
-}
-function fillOrders(){
   while(S.orders.length<3) S.orders.push(makeOrder());
 }
 
+// ══════════════════════════════════════════
+//  ORDERS
+// ══════════════════════════════════════════
+function makeOrder(){
+  const maxR=Math.min(MAX_LV,Math.max(2,S.maxLv+1));
+  const minR=Math.max(1,S.maxLv-1);
+  const lv=minR+Math.floor(Math.random()*(maxR-minR+1));
+  const c=CHARS[Math.floor(Math.random()*CHARS.length)];
+  const mult=(S.activeEvt==='char'||S.activeEvt==='fest')?3:1;
+  const coins=Math.round(BLDGS[lv-1].c*3.5*mult);
+  const gems=lv>=4?Math.floor(lv/3)*mult:0;
+  const phrase=c.phrases[Math.floor(Math.random()*c.phrases.length)];
+  return{id:Date.now()+Math.random(),lv,charId:c.id,phrase,coins,gems,mult};
+}
+
 function renderOrders(){
-  const el=document.getElementById('orders-inner');
-  el.innerHTML='';
+  const row=document.getElementById('orders-row');
+  row.innerHTML='';
+  // clear match highlights
+  document.querySelectorAll('.cell.match').forEach(c=>c.classList.remove('match'));
   S.orders.forEach(ord=>{
     const b=BLDGS[ord.lv-1];
+    const c=CHARS[ord.charId];
+    const rel=S.charRel[ord.charId];
     const has=S.grid.some(item=>item&&!item.gen&&item.lv===ord.lv);
+    const hearts='♥'.repeat(Math.min(5,Math.floor(rel/2)))+'♡'.repeat(5-Math.min(5,Math.floor(rel/2)));
     const card=document.createElement('div');
-    card.className='ord';
+    card.className='ord'+(ord.mult>1?' evt-char':'');
     card.innerHTML=`
-      <div class="char">${ord.char.f}</div>
+      ${ord.mult>1?`<span class="x3-tag">x${ord.mult}</span>`:''}
+      <div class="cface">${c.f}</div>
+      <div class="cname">${c.n}</div>
+      <div class="hearts">${hearts}</div>
+      <div class="bubble">"${ord.phrase}"</div>
       <div class="bemo">${b.e}</div>
-      <div class="bname">${b.n}</div>
-      <div class="rwd">+${ord.coins}🪙${ord.gems?'<br>+'+ord.gems+'💎':''}</div>
-      <button class="dbtn ${has?'ready':'noready'}" ${has?'':'disabled'}>
-        ${has?'배달하기 ✓':'필요: Lv.'+ord.lv}
+      <div class="rwd">+${ord.coins}🪙${ord.gems?`<br>+${ord.gems}💎`:''}</div>
+      <button class="dbtn ${has?'rdy':'nrdy'}" ${has?'':'disabled'}>
+        ${has?'✓ 배달하기':'Lv.'+ord.lv+' 필요'}
       </button>
-      <span class="lv-tag">Lv.${ord.lv}</span>`;
-    if(has) card.querySelector('.dbtn').addEventListener('click',()=>deliver(ord.id));
-    // pulse matching cells
+      <span class="lv-tag">Lv${ord.lv}</span>`;
     if(has){
+      card.querySelector('.dbtn').addEventListener('click',()=>deliver(ord.id));
+      // pulse matching cells
       S.grid.forEach((item,i)=>{
-        if(item&&!item.gen&&item.lv===ord.lv){
+        if(item&&!item.gen&&item.lv===ord.lv)
           document.querySelector(`[data-idx="${i}"]`)?.classList.add('match');
-        }
       });
     }
-    el.appendChild(card);
+    row.appendChild(card);
   });
 }
 
 function deliver(ordId){
   const idx=S.orders.findIndex(o=>o.id===ordId);
-  if(idx<0) return;
+  if(idx<0)return;
   const ord=S.orders[idx];
   const cellIdx=S.grid.findIndex(item=>item&&!item.gen&&item.lv===ord.lv);
-  if(cellIdx<0){toast(BLDGS[ord.lv-1].n+'이 없어요!');return;}
+  if(cellIdx<0){toast(BLDGS[ord.lv-1].n+' 건물이 없어요!');return;}
   S.grid[cellIdx]=null;
   S.coins+=ord.coins;
   if(ord.gems) S.gems+=ord.gems;
   S.population++;
-  S.orders.splice(idx,1);
-  fillOrders();
+  // Relationship
+  const c=CHARS[ord.charId];
+  S.charRel[ord.charId]++;
   V.deliver();
+  // Check for gift (relationship reaches 10)
+  if(S.charRel[ord.charId]>=10){
+    S.charRel[ord.charId]=0;
+    const giftCoins=Math.round(BLDGS[Math.min(MAX_LV-1,S.maxLv)-1].c*20);
+    const giftGems=10+S.maxLv;
+    S.coins+=giftCoins;S.gems+=giftGems;
+    setTimeout(()=>showGift(c,giftCoins,giftGems),400);
+    V.gift();
+  }
+  const thanksLine=c.thanks[Math.floor(Math.random()*c.thanks.length)];
+  S.orders.splice(idx,1);
+  S.orders.push(makeOrder());
   floatReward('+'+ord.coins+'🪙',cellIdx,'#FFD700');
   if(ord.gems) floatReward('+'+ord.gems+'💎',cellIdx,'#CE93D8');
   popCell(cellIdx);
-  spawnParticles(cellIdx,BLDGS[ord.lv-1]);
-  toast('배달 완료! 인구 +1 🏘️');
+  spawnParticles(cellIdx,BLDGS[ord.lv-1],12);
+  toast(`${c.f} "${thanksLine}" 인구 +1!`);
   render();save();
 }
 
-// ════════ RESIZE ════════
+// ══════════════════════════════════════════
+//  RESIZE
+// ══════════════════════════════════════════
 function computeSize(){
   const vw=Math.min(window.innerWidth,460),vh=window.innerHeight;
-  const hH=document.getElementById('hud').offsetHeight||80;
+  const hH=document.getElementById('hud').offsetHeight||78;
   const ewH=document.getElementById('evt-wrap').offsetHeight||0;
-  const owH=document.getElementById('orders-wrap').offsetHeight||90;
+  const owH=document.getElementById('orders-wrap').offsetHeight||88;
   const bH=document.getElementById('bottom').offsetHeight||52;
-  const avH=vh-hH-ewH-owH-bH-14;
+  const avH=vh-hH-ewH-owH-bH-12;
   const avW=vw-20;
   const byH=(avH-(ROWS-1)*5-18)/ROWS;
   const byW=(avW-(COLS-1)*5-18)/COLS;
@@ -513,7 +533,9 @@ function computeSize(){
   document.getElementById('grid').style.gridTemplateColumns=`repeat(5,${cs}px)`;
 }
 
-// ════════ RENDER ════════
+// ══════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════
 function render(){renderGrid();renderHUD();renderOrders();}
 
 function renderGrid(){
@@ -523,12 +545,11 @@ function renderGrid(){
     for(let i=0;i<SIZE;i++){const c=document.createElement('div');c.className='cell';c.dataset.idx=i;G.appendChild(c);}
     bindGrid();
   }
-  // clear match
   document.querySelectorAll('.cell.match').forEach(c=>c.classList.remove('match'));
   for(let i=0;i<SIZE;i++){
     const cell=G.children[i],item=S.grid[i];
     cell.innerHTML='';cell.className='cell'+(item?' filled':'');
-    if(!item) continue;
+    if(!item)continue;
     const card=document.createElement('div');
     card.className='item'+(item.gen?' gen-item':'');
     if(!item.gen){const b=BLDGS[item.lv-1];card.classList.add('t'+b.t);card.style.background=`linear-gradient(135deg,${b.g})`;}
@@ -562,24 +583,25 @@ function renderEvtBanner(){
   if(!S.activeEvt){wrap.innerHTML='';return;}
   const ev=EVENTS.find(e=>e.id===S.activeEvt);if(!ev){wrap.innerHTML='';return;}
   const rem=Math.max(0,Math.round((S.evtEnd-Date.now())/1000));
-  const m=String(Math.floor(rem/60)).padStart(2,'0'),s=String(rem%60).padStart(2,'0');
+  const m=String(Math.floor(rem/60)).padStart(2,'0'),s2=String(rem%60).padStart(2,'0');
   if(!wrap.querySelector('.evb')){
     wrap.innerHTML=`<div class="evb eslide" style="background:${ev.col}">
       <span class="ei">${ev.ico}</span>
       <span style="flex:1;min-width:0"><span class="en">${ev.n}</span><br><span class="ed">${ev.d}</span></span>
-      <span class="et" id="etcnt">${m}:${s}</span>
+      <span class="et" id="etcnt">${m}:${s2}</span>
     </div>`;computeSize();
-  } else {const el=document.getElementById('etcnt');if(el)el.textContent=m+':'+s;}
+  } else {const el=document.getElementById('etcnt');if(el)el.textContent=m+':'+s2;}
 }
 
-// ════════ DRAG ════════
+// ══════════════════════════════════════════
+//  DRAG
+// ══════════════════════════════════════════
 let drag={on:false,from:-1,over:-1};
 function bindGrid(){
   const G=document.getElementById('grid');
   G.addEventListener('touchstart',onTS,{passive:false});
   G.addEventListener('touchmove', onTM,{passive:false});
-  G.addEventListener('touchend',  onTE);
-  G.addEventListener('touchcancel',onTE);
+  G.addEventListener('touchend',  onTE);G.addEventListener('touchcancel',onTE);
   G.addEventListener('mousedown', onMS);
 }
 function cellAt(x,y){const el=document.elementFromPoint(x,y);if(!el)return -1;const c=el.closest?.('.cell');return c?+c.dataset.idx:-1;}
@@ -626,7 +648,9 @@ function onMS(e){
   document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu);
 }
 
-// ════════ MERGE ════════
+// ══════════════════════════════════════════
+//  MERGE (with tiered impact)
+// ══════════════════════════════════════════
 function doMove(from,to){
   const fr=S.grid[from],toItem=S.grid[to];
   if(!fr||fr.gen)return;
@@ -635,46 +659,66 @@ function doMove(from,to){
   if(fr.lv!==toItem.lv)return;
   if(fr.lv>=MAX_LV){toast('👑 이미 최고 레벨!');return;}
   const nlv=fr.lv+1;
-  V.merge();
+  const tier=BLDGS[nlv-1].t;
+
+  // ── TIERED VIBRATION ──
+  [V.t1,V.t2,V.t3,V.t4][tier-1]();
+
+  // ── COMBO ──
   const now=Date.now();
-  comboTimes.push(now);comboTimes=comboTimes.filter(t=>now-t<5000);
-  const autoCombo=S.activeEvt==='cmbo';
-  let mult=1,cmsg='';
-  if(autoCombo||comboTimes.length>=5){mult=2;cmsg='🔥🔥 SUPER COMBO! x2';}
-  else if(comboTimes.length>=3){mult=1.5;cmsg='🔥 COMBO! x1.5';}
-  if(S.activeEvt==='gold')mult*=2;
+  comboTimes.push(now);comboTimes=comboTimes.filter(t=>now-t<6000);
+  const autoC=S.activeEvt==='cmbo'||S.activeEvt==='fest';
+  let mult=1,cmsg='',ultraCombo=false;
+  if(autoC||comboTimes.length>=7){mult=3;cmsg='⚡ ULTRA COMBO! x3';ultraCombo=true;V.superCombo();}
+  else if(comboTimes.length>=5){mult=2;cmsg='🔥🔥 SUPER COMBO! x2';V.superCombo();}
+  else if(comboTimes.length>=3){mult=1.5;cmsg='🔥 COMBO! x1.5';V.combo();}
+  if(S.activeEvt==='gold'||S.activeEvt==='fest')mult*=2;
   const earned=Math.round(BLDGS[nlv-1].c*mult);
   S.grid[from]=null;S.grid[to]={lv:nlv};S.coins+=earned;
-  if(S.activeEvt==='luck'){S.gems+=2;floatReward('+2💎',to,'#CE93D8');}
+  if(S.activeEvt==='luck'||S.activeEvt==='fest'){S.gems+=2;floatReward('+2💎',to,'#CE93D8');}
+
+  // ── NEW BUILDING ──
   if(nlv>S.maxLv){
     S.maxLv=nlv;
     if(!S.discovered.includes(nlv)){
       S.discovered.push(nlv);
-      setTimeout(()=>showNb(nlv),300);
-      nlv===MAX_LV?V.max():V.newBldg();
+      setTimeout(()=>showNb(nlv),350);
+      nlv===MAX_LV?V.max():V.t4();
     }
   }
-  const fc=S.activeEvt==='gold'?'#FFD700':'#FFF9C4';
+
+  // ── TIERED EFFECTS ──
+  const fc=S.activeEvt==='gold'||S.activeEvt==='fest'?'#FFD700':'#FFF9C4';
   floatReward('+'+(mult>1?earned+'⭐':earned+'🪙'),to,fc);
-  spawnParticles(to,BLDGS[nlv-1]);
+  spawnParticles(to,BLDGS[nlv-1],8+tier*4);
   popCell(to);
-  if(cmsg)showCombo(cmsg,S.activeEvt);
+  if(tier===3) showImpact('EXCELLENT! ✨','#FFD700','38px',120);
+  if(tier===4||nlv===MAX_LV){
+    screenFlash(nlv===MAX_LV?'rgba(255,215,0,.5)':'rgba(200,100,255,.35)',.45);
+    screenShake();
+    showLegendary(nlv===MAX_LV?'👑 LEGENDARY! 👑':'💎 AMAZING! 💎');
+  }
+  if(cmsg) showCombo(cmsg,S.activeEvt);
   render();save();
 }
 
-// ════════ GENERATOR ════════
+// ══════════════════════════════════════════
+//  GENERATOR
+// ══════════════════════════════════════════
 function tapGen(idx){
-  if(S.energy<=0){toast('⚡ 에너지 없음! 보석 상점에서 충전하세요 💎');return;}
+  if(S.energy<=0){toast('⚡ 에너지 없음! 보석으로 충전하세요');return;}
   const empty=firstEmpty();
-  if(empty<0){toast('❗ 빈 칸 없음! 건물을 합치세요.');return;}
+  if(empty<0){toast('❗ 빈 칸 없음! 건물을 합치세요');return;}
   S.energy--;
-  const genLv=S.activeEvt==='boom'?2:1;
-  S.grid[empty]={lv:genLv};
-  V.merge();popCell(idx);render();save();
+  const lv=(S.activeEvt==='boom'||S.activeEvt==='fest')?2:1;
+  S.grid[empty]={lv};
+  vib([28]);popCell(idx);render();save();
 }
 function firstEmpty(){for(let i=0;i<SIZE;i++)if(!S.grid[i])return i;return -1;}
 
-// ════════ SELL ════════
+// ══════════════════════════════════════════
+//  SELL
+// ══════════════════════════════════════════
 function toggleSell(){
   S.sell=!S.sell;
   const b=document.getElementById('bsell');
@@ -683,19 +727,21 @@ function toggleSell(){
 }
 function sellItem(idx){
   const item=S.grid[idx];
-  if(!item||item.gen){toast('나무는 판매할 수 없어요');return;}
+  if(!item||item.gen){toast('나무는 판매 불가');return;}
   const p=Math.floor(BLDGS[item.lv-1].c*0.4);
   S.grid[idx]=null;S.coins+=p;
   toast(BLDGS[item.lv-1].n+' 판매 → +'+p+'🪙');
   S.sell=false;
   const b=document.getElementById('bsell');b.textContent='💰 판매';b.classList.remove('active');
-  render();save();
+  vib([28]);render();save();
 }
 
-// ════════ SHOP ════════
+// ══════════════════════════════════════════
+//  SHOP
+// ══════════════════════════════════════════
 function openShop(){
-  document.getElementById('shcoin').textContent=S.coins.toLocaleString();
-  document.getElementById('shgem').textContent=S.gems;
+  document.getElementById('shc').textContent=S.coins.toLocaleString();
+  document.getElementById('shg').textContent=S.gems;
   renderShopList();
   document.getElementById('shop-ov').classList.remove('hidden');
 }
@@ -711,8 +757,8 @@ function renderShopList(){
   if(shopTab==='gem'){
     const fb=document.createElement('button');fb.id='freebtn';
     const cd=8*60*1000,el=Date.now()-S.lastFreeGems,ready=el>=cd;
-    if(ready){fb.innerHTML='🎬 무료 보석 받기 <strong style="color:#7D3C98;font-size:16px">+20💎</strong>';}
-    else{const r=Math.ceil((cd-el)/1000);fb.innerHTML=`🕐 재충전 중... ${Math.floor(r/60)}:${String(r%60).padStart(2,'0')}`;fb.disabled=true;}
+    if(ready){fb.innerHTML='🎬 무료 보석 받기 <strong style="color:#7D3C98;font-size:16px"> +20💎</strong>';}
+    else{const r=Math.ceil((cd-el)/1000);fb.innerHTML=`🕐 충전 중... ${Math.floor(r/60)}:${String(r%60).padStart(2,'0')}`;fb.disabled=true;}
     fb.addEventListener('click',claimFreeGems);list.appendChild(fb);
     GEM_SHOP.forEach(it=>{
       const b=document.createElement('button');b.className='si gi';
@@ -729,7 +775,7 @@ function renderShopList(){
 }
 function buyCoin(it){
   if(S.coins<it.p){toast('🪙 코인 부족!');return;}
-  if(it.a==='ecoin'){S.coins-=it.p;S.energy=Math.min(MAX_E,S.energy+it.v);V.buy();toast('⚡ 에너지 +'+it.v+'!');closeShop();render();save();return;}
+  if(it.a==='ecoin'){S.coins-=it.p;S.energy=Math.min(MAX_E,S.energy+it.v);V.buy();toast('⚡ +'+it.v+'!');closeShop();render();save();return;}
   const empty=firstEmpty();if(empty<0){toast('❗ 빈 칸 없음!');return;}
   S.coins-=it.p;V.buy();
   if(it.a==='gen')S.grid[empty]={gen:true};
@@ -739,28 +785,37 @@ function buyCoin(it){
 }
 function buyGem(it){
   if(S.gems<it.p){toast('💎 보석 부족!\n무료 버튼을 눌러보세요!');return;}
-  if(it.a==='efull'){S.gems-=it.p;S.energy=MAX_E;S.lastEnergy=Date.now();V.buy();toast('⚡ 에너지 완충!');closeShop();render();save();return;}
-  if(it.a==='egem'){S.gems-=it.p;S.energy=Math.min(MAX_E,S.energy+it.v);V.buy();toast('⚡ 에너지 +'+it.v+'!');closeShop();render();save();return;}
+  if(it.a==='efull'){S.gems-=it.p;S.energy=MAX_E;S.lastEnergy=Date.now();V.buy();toast('⚡ 완충!');closeShop();render();save();return;}
+  if(it.a==='egem'){S.gems-=it.p;S.energy=Math.min(MAX_E,S.energy+it.v);V.buy();toast('⚡ +'+it.v+'!');closeShop();render();save();return;}
   const empty=firstEmpty();if(empty<0){toast('❗ 빈 칸 없음!');return;}
   S.gems-=it.p;V.buy();
   if(it.a==='item')S.grid[empty]={lv:it.lv};
-  else if(it.a==='spin'){const lv=5+Math.floor(Math.random()*5);S.grid[empty]={lv};toast('🎰 '+BLDGS[lv-1].n+' (Lv.'+lv+') 획득!');}
-  else if(it.a==='spec'){const lv=7+Math.floor(Math.random()*4);S.grid[empty]={lv};toast('🌟 '+BLDGS[lv-1].n+' (Lv.'+lv+') 획득!');}
+  else if(it.a==='spin'){const lv=5+Math.floor(Math.random()*5);S.grid[empty]={lv};toast('🎰 '+BLDGS[lv-1].n+' Lv.'+lv+' 획득!');}
+  else if(it.a==='spec'){const lv=7+Math.floor(Math.random()*4);S.grid[empty]={lv};toast('🌟 '+BLDGS[lv-1].n+' Lv.'+lv+' 획득!');}
   closeShop();render();save();
 }
 function claimFreeGems(){S.gems+=20;S.lastFreeGems=Date.now();V.buy();toast('💎 무료 보석 +20!');closeShop();render();save();}
 
-// ════════ NEW BUILDING ════════
+// ══════════════════════════════════════════
+//  NEW BUILDING / GIFT / DAILY
+// ══════════════════════════════════════════
 function showNb(lv){
   const b=BLDGS[lv-1];
   document.getElementById('nbemo').textContent=b.e;
   document.getElementById('nbname').textContent=b.n;
-  document.getElementById('nblv').textContent='레벨 '+lv+' · '+TIER_NAME[b.t]+' 등급';
+  document.getElementById('nblv').textContent='레벨 '+lv+' · '+TIER_N[b.t]+' 등급';
   document.getElementById('nb-ov').classList.remove('hidden');
 }
 function closeNb(){document.getElementById('nb-ov').classList.add('hidden');}
 
-// ════════ DAILY ════════
+function showGift(c,coins,gems){
+  document.getElementById('gchar').textContent=c.f;
+  document.getElementById('gsub').textContent=c.n+'가 우정 선물을 보냈어요!';
+  document.getElementById('grwd').innerHTML=`+${coins}🪙<br>+${gems}💎`;
+  document.getElementById('gift-ov').classList.remove('hidden');
+}
+function closeGift(){document.getElementById('gift-ov').classList.add('hidden');}
+
 function checkDaily(){
   const today=new Date().toDateString();
   if(S.lastDaily===today)return;
@@ -777,42 +832,76 @@ function claimDaily(){
   render();save();
 }
 
-// ════════ EVENTS ════════
+// ══════════════════════════════════════════
+//  EVENTS
+// ══════════════════════════════════════════
 function tickEvents(){
   const now=Date.now();
   if(S.activeEvt&&now>=S.evtEnd){
     S.activeEvt=null;S.evtEnd=0;
-    S.nextEvt=now+(6+Math.random()*9)*60000;
+    S.nextEvt=now+(5+Math.random()*9)*60000;
     document.getElementById('evt-wrap').innerHTML='';
+    document.body.style.background='';
     computeSize();save();return;
   }
   if(!S.activeEvt&&now>=S.nextEvt){
     const ev=EVENTS[Math.floor(Math.random()*EVENTS.length)];
     S.activeEvt=ev.id;S.evtEnd=now+ev.dur*1000;
-    document.getElementById('eico').textContent=ev.ico;
-    document.getElementById('ename').textContent=ev.n;
-    document.getElementById('edesc').textContent=ev.d;
-    document.getElementById('edur').textContent=Math.round(ev.dur/60)+'분 지속';
+    // Event-specific background tint
+    document.body.style.background=`linear-gradient(168deg,#4BA8E8 0%,#7EC87A 48%,#336620 100%), ${ev.bg}`;
+    // Popup
+    document.getElementById('ep-ico').textContent=ev.ico;
+    document.getElementById('ep-name').textContent=ev.n;
+    document.getElementById('ep-desc').textContent=ev.d;
+    document.getElementById('ep-dur').textContent=Math.round(ev.dur/60)+'분 지속';
     document.getElementById('evt-ov').classList.remove('hidden');
-    V.event();renderEvtBanner();computeSize();save();
+    // Refresh order rewards if char/fest event
+    if(ev.id==='char'||ev.id==='fest'){S.orders=[];while(S.orders.length<3)S.orders.push(makeOrder());}
+    V.event();screenFlash(ev.bg||'rgba(255,200,0,.2)',.5);renderEvtBanner();computeSize();save();
   }
 }
 function closeEvtPop(){document.getElementById('evt-ov').classList.add('hidden');}
 
-// ════════ EFFECTS ════════
-function spawnParticles(cidx,bldg){
+// ══════════════════════════════════════════
+//  IMPACT EFFECTS
+// ══════════════════════════════════════════
+function screenFlash(color,dur=0.45){
+  const f=document.getElementById('flash');
+  f.style.background=color;f.style.animation='none';
+  requestAnimationFrame(()=>{f.className='do';f.style.animationDuration=dur+'s';setTimeout(()=>{f.className='';},dur*1000+50);});
+}
+function screenShake(){
+  document.body.classList.remove('shake');
+  requestAnimationFrame(()=>{document.body.classList.add('shake');setTimeout(()=>document.body.classList.remove('shake'),440);});
+}
+function showImpact(txt,color,size,top){
+  const el=document.createElement('div');
+  el.className='impact-txt';el.textContent=txt;
+  el.style.cssText+=`top:${top||130}px;font-size:${size||'30px'};color:${color||'#FFD700'};text-shadow:0 3px 6px rgba(0,0,0,.6)`;
+  document.body.appendChild(el);
+  setTimeout(()=>{el.style.animation='impactOut .3s ease forwards';setTimeout(()=>el.remove(),350);},1100);
+}
+function showLegendary(txt){
+  const el=document.createElement('div');el.className='leg-txt';el.textContent=txt;
+  document.body.appendChild(el);
+  setTimeout(()=>{el.style.animation='legOut .4s ease forwards';setTimeout(()=>el.remove(),420);},1400);
+}
+
+function spawnParticles(cidx,bldg,count=10){
   const cell=document.querySelector(`[data-idx="${cidx}"]`);if(!cell)return;
   const r=cell.getBoundingClientRect();
   const cx=r.left+r.width/2,cy=r.top+r.height/2;
   const base=bldg.g.split(',')[0].trim();
-  const cols=['#FFD700','#FFF9C4','#FF8C00',base,'#ffffff','#FFE082'];
-  for(let i=0;i<12;i++){
+  const cols=['#FFD700','#FFF9C4','#FF8C00',base,'#fff','#FFE082','#FF6B6B','#4ECDC4'];
+  for(let i=0;i<count;i++){
     const p=document.createElement('div');
-    const angle=(i/12)*Math.PI*2+(Math.random()-.5)*.5;
-    const dist=26+Math.random()*36;const sz=4+Math.random()*6;
+    const angle=(i/count)*Math.PI*2+(Math.random()-.5)*.5;
+    const dist=22+Math.random()*(count>12?46:32);
+    const sz=3+Math.random()*(count>12?8:5);
+    const dur=(.55+Math.random()*.3).toFixed(2);
     p.className='pt';
-    p.style.cssText=`left:${cx}px;top:${cy}px;width:${sz}px;height:${sz}px;background:${cols[i%cols.length]};--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;`;
-    document.body.appendChild(p);setTimeout(()=>p.remove(),760);
+    p.style.cssText=`left:${cx}px;top:${cy}px;width:${sz}px;height:${sz}px;background:${cols[i%cols.length]};--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;--dur:${dur}s`;
+    document.body.appendChild(p);setTimeout(()=>p.remove(),parseFloat(dur)*1000+50);
   }
 }
 function popCell(idx){
@@ -836,14 +925,16 @@ function showCombo(msg,evtId){
   el.textContent=msg;el.style.display='block';
   el.style.animation='cin .34s cubic-bezier(.34,1.56,.64,1) forwards';
   clearTimeout(cTimer);
-  cTimer=setTimeout(()=>{el.style.animation='cout .3s ease forwards';setTimeout(()=>{el.style.display='none';el.style.animation='';},310);},1800);
+  cTimer=setTimeout(()=>{el.style.animation='cout .3s ease forwards';setTimeout(()=>{el.style.display='none';el.style.animation='';},320);},1800);
 }
 function toast(msg){
   const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
   clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2500);
 }
 
-// ════════ TICK ════════
+// ══════════════════════════════════════════
+//  TICK
+// ══════════════════════════════════════════
 function tick(){
   if(S.energy<MAX_E){
     const rm=S.activeEvt==='ener'?REGEN_MS/5:REGEN_MS;
@@ -854,11 +945,15 @@ function tick(){
   renderHUD();renderEvtBanner();
 }
 
-// ════════ SERVICE WORKER ════════
+// ══════════════════════════════════════════
+//  SERVICE WORKER
+// ══════════════════════════════════════════
 if('serviceWorker' in navigator)
   window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 
-// ════════ BOOT ════════
+// ══════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════
 load();computeSize();render();checkDaily();
 setInterval(tick,1000);
 window.addEventListener('resize',()=>{computeSize();render();});
