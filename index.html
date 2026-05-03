@@ -15,6 +15,9 @@ body{background:#FFF8F0;font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-se
 .cell.open{background:#FEF3C7;border:2px solid #FCD34D}
 .cell.locked{background:#E5E7EB;border:2px dashed #9CA3AF;cursor:pointer;font-size:0.7em}
 .cell.drag-hi{background:#FDE68A!important;border-color:#F59E0B!important}
+/* 주문 하이라이트 */
+@keyframes ordered{0%,100%{box-shadow:0 0 0 2px #10B981}50%{box-shadow:0 0 0 5px #10B981,0 0 12px rgba(16,185,129,.45)}}
+.cell.ordered{animation:ordered 1.4s ease-in-out infinite;border-color:#10B981!important;background:#ECFDF5!important}
 .gen-btn{background:#D1FAE5;border:2px solid #34D399;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px;cursor:pointer;user-select:none;transition:transform .1s;min-height:60px}
 .gen-btn.pressed{transform:scale(.93)}
 .gen-btn.locked{background:#F3F4F6;border-color:#D1D5DB;opacity:.55;cursor:default}
@@ -22,7 +25,7 @@ body{background:#FFF8F0;font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-se
 .cslot.empty{background:#F9FAFB;border-color:#D1D5DB;border-style:dashed}
 .cslot.drop-hi{border:3px solid #F59E0B!important;background:#FFFBEB!important}
 .pbar{width:100%;height:5px;border-radius:3px;background:#E5E7EB;overflow:hidden;margin-top:2px}
-.pfill{height:100%;border-radius:3px;transition:width .4s,background .4s}
+.pfill{height:100%;border-radius:3px;transition:width .6s,background .6s}
 .ghost{position:fixed;pointer-events:none;z-index:1000;font-size:2.5em;transform:translate(-50%,-55%);filter:drop-shadow(0 4px 8px rgba(0,0,0,.35));line-height:1}
 @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.4)}100%{transform:scale(1)}}
 @keyframes fadeup{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-55px)}}
@@ -92,31 +95,31 @@ const TRAILS={
   tomato:{
     gen:{icon:'🌱',name:'토마토 텃밭'},
     items:[
-      {name:'방울토마토',icon:'🍅',coins:0,patience:0},
-      {name:'토마토',icon:'🍅',coins:10,patience:30},
-      {name:'토마토 슬라이스',icon:'🔪',coins:25,patience:45},
-      {name:'토마토 소스',icon:'🥫',coins:60,patience:60},
-      {name:'마르게리타 피자',icon:'🍕',coins:150,patience:90},
+      {name:'방울토마토', icon:'🍅', coins:0,   patience:0},
+      {name:'토마토',     icon:'🍅', coins:10,  patience:30},
+      {name:'토마토 슬라이스', icon:'🍅', coins:25, patience:45},  // 🔪 제거
+      {name:'토마토 소스', icon:'🥫', coins:60,  patience:60},
+      {name:'마르게리타 피자', icon:'🍕', coins:150, patience:90},
     ]
   },
   bread:{
     gen:{icon:'🌾',name:'밀밭'},
     items:[
-      {name:'밀',icon:'🌾',coins:0,patience:0},
-      {name:'반죽',icon:'🫓',coins:12,patience:30},
-      {name:'빵',icon:'🍞',coins:30,patience:45},
-      {name:'샌드위치',icon:'🥪',coins:70,patience:60},
-      {name:'햄버거',icon:'🍔',coins:160,patience:90},
+      {name:'밀',     icon:'🌾', coins:0,   patience:0},
+      {name:'반죽',   icon:'🫓', coins:12,  patience:30},
+      {name:'빵',     icon:'🍞', coins:30,  patience:45},
+      {name:'샌드위치', icon:'🥪', coins:70,  patience:60},
+      {name:'햄버거', icon:'🍔', coins:160, patience:90},
     ]
   },
   meat:{
     gen:{icon:'🐄',name:'정육점'},
     items:[
-      {name:'생고기',icon:'🥩',coins:0,patience:0},
-      {name:'다진고기',icon:'🥩',coins:15,patience:35},
-      {name:'패티',icon:'🍖',coins:35,patience:50},
-      {name:'스테이크',icon:'🍽️',coins:80,patience:65},
-      {name:'비프 플래터',icon:'🫕',coins:200,patience:90},
+      {name:'생고기',    icon:'🥩', coins:0,   patience:0},
+      {name:'다진고기',  icon:'🔪', coins:15,  patience:35},  // 칼 = 다지는 동작
+      {name:'패티',      icon:'🫓', coins:35,  patience:50},
+      {name:'스테이크',  icon:'🍖', coins:80,  patience:65},
+      {name:'비프 플래터', icon:'🫕', coins:200, patience:90},
     ]
   }
 };
@@ -124,10 +127,10 @@ const TK=Object.keys(TRAILS);
 
 const LV_XP=[0,0,100,250,500,900,1400,2000,2800,3800,5000];
 const LV_REWARD={
-  2:{unlockExtra:6,gems:5,msg:'셀 6칸 추가 해금! 💎+5'},
-  3:{gen:'bread',gems:5,msg:'밀밭 생성기 해금! 💎+5'},
-  5:{maxCust:4,gems:5,msg:'손님 자리 4개로 확장! 💎+5'},
-  7:{gen:'meat',gems:5,msg:'정육점 생성기 해금! 💎+5'},
+  2:{unlockExtra:6, gems:5, msg:'셀 6칸 추가 해금! 💎+5'},
+  3:{gen:'bread',   gems:5, msg:'밀밭 생성기 해금! 💎+5'},
+  5:{maxCust:4,     gems:5, msg:'손님 자리 4개로 확장! 💎+5'},
+  7:{gen:'meat',    gems:5, msg:'정육점 생성기 해금! 💎+5'},
 };
 const CEMOJI=['👨','👩','👦','👧','👴','👵','🧑','👱','🧔','👮'];
 
@@ -142,15 +145,15 @@ let S={};
 
 function defState(){
   return{
-    coins:500,gems:10,energy:MAX_EN,energyLastAt:Date.now(),
-    level:1,xp:0,reputation:5,
+    coins:500, gems:10, energy:MAX_EN, energyLastAt:Date.now(),
+    level:1, xp:0, reputation:5,
     board:Array(TOTAL).fill(null),
     unlocked:Array.from({length:18},(_,i)=>i),
     unlockedGens:['tomato'],
     unlockedTrails:['tomato'],
     maxCust:3,
     customers:[],
-    custNextAt:[Date.now()+5000,Date.now()+9000,Date.now()+13000],
+    custNextAt:[Date.now()+2000, Date.now()+4000, Date.now()+6000],  // 빠른 첫 등장
     dailyClaimed:0,
   };
 }
@@ -163,11 +166,11 @@ function loadState(){
       if(!S.board||S.board.length!==TOTAL)S.board=Array(TOTAL).fill(null);
       if(!S.unlocked)S.unlocked=Array.from({length:18},(_,i)=>i);
       if(!S.customers)S.customers=[];
-      if(!S.custNextAt)S.custNextAt=[Date.now()+5000,Date.now()+9000,Date.now()+13000];
+      if(!S.custNextAt)S.custNextAt=[Date.now()+2000,Date.now()+4000,Date.now()+6000];
       if(!S.maxCust)S.maxCust=3;
       if(!S.unlockedTrails)S.unlockedTrails=['tomato'];
       if(!S.unlockedGens)S.unlockedGens=['tomato'];
-      delete S._enStarted; // clean up legacy flag
+      delete S._enStarted;
     }else S=defState();
   }catch{S=defState();}
   const gap=Date.now()-(S.energyLastAt||Date.now());
@@ -275,6 +278,20 @@ function renderBoard(){
     }
     bd.appendChild(cell);
   }
+  updateOrderHighlights();
+}
+
+// 손님 주문과 매칭되는 보드 아이템 하이라이트
+function updateOrderHighlights(){
+  document.querySelectorAll('.cell.ordered').forEach(c=>c.classList.remove('ordered'));
+  S.customers.forEach(cust=>{
+    for(let i=0;i<TOTAL;i++){
+      const it=S.board[i];
+      if(it&&it.trail===cust.trail&&it.stage===cust.stage){
+        document.querySelector(`[data-cell="${i}"]`)?.classList.add('ordered');
+      }
+    }
+  });
 }
 
 function renderCusts(){
@@ -288,7 +305,8 @@ function renderCusts(){
       const pct=Math.max(0,c.patience/c.maxPatience*100);
       const pc=pct>60?'#10B981':pct>30?'#F59E0B':'#EF4444';
       d.className='cslot';d.dataset.cslot=s;
-      d.innerHTML=`<div class="text-xl pointer-events-none">${c.emoji}</div>`+
+      d.innerHTML=
+        `<div class="text-xl pointer-events-none">${c.emoji}</div>`+
         `<div class="text-xl pointer-events-none">${inf?.icon||'?'}</div>`+
         `<div class="text-xs text-center leading-tight text-amber-800 pointer-events-none" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%">${inf?.name||''}</div>`+
         `<div class="pbar"><div class="pfill" style="width:${pct}%;background:${pc}"></div></div>`;
@@ -296,9 +314,35 @@ function renderCusts(){
     }else{
       d.className='cslot empty';
       const wait=Math.max(0,Math.ceil(((S.custNextAt[s]||0)-now)/1000));
-      d.innerHTML=wait>0?`<div class="text-gray-400 text-xl">⏱</div><div class="text-xs text-gray-400">${wait}s</div>`:`<div class="text-gray-300 text-2xl">👤</div>`;
+      d.innerHTML=
+        `<div class="text-gray-400 text-xl">⏱</div>`+
+        `<div class="text-xs text-gray-400" data-timer="${s}">${wait>0?wait+'s':''}</div>`;
     }
     el.appendChild(d);
+  }
+  updateOrderHighlights();
+}
+
+// 성능 최적화: 매 rAF마다 DOM 재생성 대신 인내심 바만 갱신
+function tickCustUI(now){
+  S.customers.forEach(c=>{
+    const fill=document.querySelector(`[data-cslot="${c.slot}"] .pfill`);
+    if(!fill)return;
+    const pct=Math.max(0,c.patience/c.maxPatience*100);
+    fill.style.width=pct+'%';
+    fill.style.background=pct>60?'#10B981':pct>30?'#F59E0B':'#EF4444';
+    const slot=document.querySelector(`[data-cslot="${c.slot}"]`);
+    if(slot)slot.style.borderColor=pct<20?'#EF4444':'';
+  });
+  // 빈 슬롯 카운트다운 갱신
+  for(let s=0;s<S.maxCust;s++){
+    if(!S.customers.some(c=>c.slot===s)){
+      const timerEl=document.querySelector(`[data-timer="${s}"]`);
+      if(timerEl){
+        const wait=Math.max(0,Math.ceil(((S.custNextAt[s]||0)-now)/1000));
+        timerEl.textContent=wait>0?wait+'s':'';
+      }
+    }
   }
 }
 
@@ -306,41 +350,54 @@ function renderAll(){renderHUD();renderGens();renderBoard();renderCusts();}
 
 // ── DRAG & DROP (Pointer Events) ──────────────────────────────────
 let DRG=null;
+let PTR={x:0,y:0,t:0,idx:-1};
+const DRAG_THR=8;
 
 function onPtrDown(e){
   if(e.button!==0&&e.pointerType==='mouse')return;
   e.preventDefault();e.stopPropagation();
-  const cellEl=e.currentTarget;
-  const idx=parseInt(cellEl.dataset.cell);
+  const idx=parseInt(e.currentTarget.dataset.cell);
   if(!S.board[idx])return;
-  const it=S.board[idx];
-  const inf=getItem(it.trail,it.stage);
-  if(!inf)return;
-  const ghost=document.createElement('div');
-  ghost.className='ghost';ghost.textContent=inf.icon;
-  document.body.appendChild(ghost);
-  DRG={idx,ghost};
-  moveGhost(e);
+  PTR={x:e.clientX,y:e.clientY,t:Date.now(),idx};
   document.addEventListener('pointermove',onPtrMove,{passive:false});
   document.addEventListener('pointerup',onPtrUp);
   document.addEventListener('pointercancel',onPtrCancel);
 }
 
-function moveGhost(e){
-  if(!DRG?.ghost)return;
-  DRG.ghost.style.left=e.clientX+'px';
-  DRG.ghost.style.top=e.clientY+'px';
+function startDrag(idx,e){
+  const it=S.board[idx];
+  const inf=getItem(it.trail,it.stage);if(!inf)return;
+  const ghost=document.createElement('div');
+  ghost.className='ghost';ghost.textContent=inf.icon;
+  ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';
+  document.body.appendChild(ghost);
+  DRG={idx,ghost};
 }
 
 function onPtrMove(e){
-  e.preventDefault();moveGhost(e);
-  document.querySelectorAll('.drag-hi,.drop-hi').forEach(x=>x.classList.remove('drag-hi','drop-hi'));
-  const el=document.elementFromPoint(e.clientX,e.clientY);
-  el?.closest('[data-cell]')?.classList.add('drag-hi');
-  el?.closest('[data-cslot]')?.classList.add('drop-hi');
+  e.preventDefault();
+  const moved=Math.hypot(e.clientX-PTR.x,e.clientY-PTR.y);
+  if(!DRG&&moved>DRAG_THR)startDrag(PTR.idx,e);
+  if(DRG){
+    DRG.ghost.style.left=e.clientX+'px';DRG.ghost.style.top=e.clientY+'px';
+    document.querySelectorAll('.drag-hi,.drop-hi').forEach(x=>x.classList.remove('drag-hi','drop-hi'));
+    const el=document.elementFromPoint(e.clientX,e.clientY);
+    el?.closest('[data-cell]')?.classList.add('drag-hi');
+    el?.closest('[data-cslot]')?.classList.add('drop-hi');
+  }
 }
 
 function onPtrUp(e){
+  const moved=Math.hypot(e.clientX-PTR.x,e.clientY-PTR.y);
+  const quick=Date.now()-PTR.t<280;
+
+  if(moved<DRAG_THR&&quick&&PTR.idx>=0){
+    // 탭(짧게 누름) → 아이템 메뉴
+    onPtrCancel();
+    showItemMenu(PTR.idx);
+    return;
+  }
+
   if(DRG){
     const el=document.elementFromPoint(e.clientX,e.clientY);
     const tCell=el?.closest('[data-cell]');
@@ -361,6 +418,33 @@ function onPtrCancel(){
   document.removeEventListener('pointermove',onPtrMove);
   document.removeEventListener('pointerup',onPtrUp);
   document.removeEventListener('pointercancel',onPtrCancel);
+}
+
+// ── 아이템 메뉴 (탭) ──────────────────────────────────────────────
+function showItemMenu(cellIdx){
+  const it=S.board[cellIdx];if(!it)return;
+  const inf=getItem(it.trail,it.stage);if(!inf)return;
+  const canServe=inf.patience>0;
+  const sellPrice=it.stage<=1?1:Math.floor((inf.coins||0)*0.4);
+  const statusMsg=canServe
+    ? `<span class="text-green-600 font-bold">✅ 서빙 가능</span> · 보상 🪙${inf.coins}`
+    : `<span class="text-gray-400">단계 올리면 서빙 가능 (지금은 합치기만 됩니다)</span>`;
+  showModal(inf.icon+' '+inf.name,
+    `<p class="text-sm text-center mb-1">단계 ${it.stage} / ${maxStg(it.trail)}</p>`+
+    `<p class="text-sm text-center mb-4">${statusMsg}</p>`+
+    `<button onclick="sellItem(${cellIdx})" class="w-full bg-red-100 text-red-600 py-2.5 rounded-xl font-bold">🗑️ 팔기 (🪙 ${sellPrice})</button>`+
+    `<button onclick="closeModal()" class="mt-2 w-full bg-gray-100 py-2 rounded-xl text-gray-600">취소</button>`);
+}
+
+function sellItem(cellIdx){
+  const it=S.board[cellIdx];
+  if(!it){closeModal();return;}
+  const inf=getItem(it.trail,it.stage);
+  const sellPrice=it.stage<=1?1:Math.floor((inf?.coins||0)*0.4);
+  S.board[cellIdx]=null;
+  S.coins+=sellPrice;
+  closeModal();renderBoard();renderHUD();save();
+  toast('🗑️ 판매 +🪙'+sellPrice);
 }
 
 // ── MERGE ─────────────────────────────────────────────────────────
@@ -450,11 +534,16 @@ function spawnCust(slot){
 
 let _lastTick=Date.now();
 function updateCusts(now){
+  let needRender=false;
+
+  // 빈 슬롯에 손님 스폰
   for(let s=0;s<S.maxCust;s++){
     if(!S.customers.some(c=>c.slot===s)&&now>=(S.custNextAt[s]||0)){
-      spawnCust(s);
+      spawnCust(s);needRender=true;
     }
   }
+
+  // 1초마다 인내심 감소
   if(now-_lastTick>=1000){
     _lastTick=now;
     for(let i=S.customers.length-1;i>=0;i--){
@@ -469,10 +558,14 @@ function updateCusts(now){
         S.customers.splice(i,1);
         S.custNextAt[sl]=now+10000+Math.random()*10000;
         vib([25,15,25,15,25]);
+        needRender=true;
       }
     }
+    if(!needRender)tickCustUI(now); // 전체 재렌더 없이 바만 갱신
     save();
   }
+
+  if(needRender)renderCusts();
 }
 
 // ── LEVEL ─────────────────────────────────────────────────────────
@@ -530,7 +623,7 @@ function shop(type){
   if(type==='en-full'){if(g<5){toast('💎 부족!');return;}S.gems-=5;S.energy=MAX_EN;S.energyLastAt=Date.now();toast('⚡ 에너지 완충!');}
   else if(type==='en-5'){if(g<2){toast('💎 부족!');return;}S.gems-=2;S.energy=Math.min(MAX_EN,S.energy+5);toast('⚡ +5!');}
   else if(type==='gem-10'){if(S.coins<500){toast('🪙 부족!');return;}S.coins-=500;S.gems=(S.gems||0)+10;toast('💎 +10!');}
-  else if(type==='pat'){if(g<1){toast('💎 부족!');return;}if(!S.customers.length){toast('손님 없음!');return;}S.gems-=1;S.customers.forEach(c=>c.patience=Math.min(c.maxPatience,c.patience+30));renderCusts();toast('⏱ +30초!');}
+  else if(type==='pat'){if(g<1){toast('💎 부족!');return;}if(!S.customers.length){toast('손님 없음!');return;}S.gems-=1;S.customers.forEach(c=>c.patience=Math.min(c.maxPatience,c.patience+30));tickCustUI(Date.now());toast('⏱ +30초!');}
   closeModal();renderHUD();save();
 }
 
@@ -538,11 +631,12 @@ function shop(type){
 function openDex(){
   let h='<div class="grid grid-cols-3 gap-2">';
   S.unlockedTrails.forEach(t=>{
-    TRAILS[t].items.forEach(it=>{
-      h+=`<div class="bg-amber-50 rounded-xl p-2 text-center"><div class="text-2xl">${it.icon}</div><div class="text-xs mt-0.5 text-amber-900 leading-tight">${it.name}</div><div class="text-xs text-amber-500">${it.coins?'🪙'+it.coins:'-'}</div></div>`;
+    TRAILS[t].items.forEach((it,i)=>{
+      const canServe=it.patience>0;
+      h+=`<div class="bg-amber-50 rounded-xl p-2 text-center ${canServe?'':'opacity-50'}"><div class="text-2xl">${it.icon}</div><div class="text-xs mt-0.5 text-amber-900 leading-tight">${it.name}</div><div class="text-xs text-amber-500">${it.coins?'🪙'+it.coins:'-'}</div></div>`;
     });
   });
-  h+='</div><button onclick="closeModal()" class="mt-3 w-full bg-gray-100 py-2 rounded-xl text-gray-600">닫기</button>';
+  h+='</div><p class="text-xs text-gray-400 mt-2 text-center">흐린 아이템은 단계를 올려야 서빙 가능</p><button onclick="closeModal()" class="mt-3 w-full bg-gray-100 py-2 rounded-xl text-gray-600">닫기</button>';
   showModal('📖 도감',h);
 }
 
@@ -595,7 +689,7 @@ function tick(){
     }
   }
   updateCusts(now);
-  renderHUD();renderCusts();
+  renderHUD();
   requestAnimationFrame(tick);
 }
 
