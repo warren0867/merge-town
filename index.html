@@ -539,16 +539,19 @@ function updateCusts(now){
   // 빈 슬롯에 손님 스폰
   for(let s=0;s<S.maxCust;s++){
     if(!S.customers.some(c=>c.slot===s)&&now>=(S.custNextAt[s]||0)){
-      spawnCust(s);needRender=true;
+      const before=S.customers.length;
+      spawnCust(s);
+      if(S.customers.length>before)needRender=true;
     }
   }
 
-  // 1초마다 인내심 감소
-  if(now-_lastTick>=1000){
-    _lastTick=now;
+  // 1초마다 인내심 감소 (경과 틱 수만큼 반복해 백그라운드 누락 방지)
+  const ticks=Math.floor((now-_lastTick)/1000);
+  if(ticks>0){
+    _lastTick+=ticks*1000;
     for(let i=S.customers.length-1;i>=0;i--){
       const c=S.customers[i];
-      c.patience--;
+      c.patience-=ticks;
       if(c.patience<=0){
         const sl=c.slot;
         const cEl=document.querySelector(`[data-cslot="${sl}"]`);
