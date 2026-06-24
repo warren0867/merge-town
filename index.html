@@ -37,17 +37,58 @@ body{background:#FFF8F0;font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-se
 .coin-el{position:fixed;pointer-events:none;z-index:999;font-size:1.1em;animation:coinfly .55s ease-in forwards}
 .lvup-el{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:2000;pointer-events:none;animation:lvup 2s ease-out forwards}
 .do-shake{animation:shake .25s ease-out}
+/* ===== B 페이스리프트: 3D 아이콘 + 따뜻한 식당 테마 ===== */
+body{background:radial-gradient(120% 80% at 50% 0%,#FFF6EA 0%,#FFE9D2 55%,#FBD9BC 100%)!important}
+#hud{background:linear-gradient(180deg,#FB923C,#EA580C)!important;box-shadow:0 2px 12px rgba(234,88,12,.4);gap:6px!important}
+.res-chip{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:999px;font-weight:800;line-height:1}
+.res-chip img{width:18px;height:18px;display:block;object-fit:contain}
+/* 보드 셀: 라운드+소프트섀도+단계별 색 */
+.cell{background:#fff;border:2px solid #F1D6AE;border-radius:14px;box-shadow:0 1px 3px rgba(120,70,20,.08);overflow:visible}
+.cell.open{background:#FFFDF8;border-color:#F6DCB2}
+.cell.drag-hi{background:#FFEFCF!important;border-color:#F59E0B!important;transform:scale(1.04)}
+.cell.stg1{background:#FFFEFB}
+.cell.stg2{background:#FFF8EE}
+.cell.stg3{background:#FFF0DC;border-color:#FBCB86}
+.cell.stg4{background:#FFE6C4;border-color:#F4AC54}
+.cell.stg5{background:linear-gradient(160deg,#FFF0BE,#FFD581);border-color:#F59E0B;box-shadow:0 0 0 1px #F59E0B,0 3px 10px rgba(245,158,11,.45)}
+.item-img{width:82%;height:82%;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18));pointer-events:none}
+.stage-badge{position:absolute;bottom:1px;right:1px;min-width:15px;height:15px;padding:0 3px;font-size:10px;font-weight:900;color:#fff;background:linear-gradient(180deg,#FB923C,#DC2626);border-radius:999px;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 1px 2px rgba(0,0,0,.35)}
+/* 생성기 */
+.gen-btn{background:linear-gradient(180deg,#ECFDF5,#C7F5DF)!important;border:2px solid #6EE7B7!important;border-radius:16px!important;box-shadow:0 2px 6px rgba(16,185,129,.22)}
+.gen-ic{display:flex;justify-content:center}
+.gen-img{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2))}
+.gen-nm{font-size:10px;line-height:1.05;text-align:center;color:#065F46;font-weight:800;margin-top:1px}
+.gen-en{font-size:10px;color:#B45309;font-weight:800;margin-top:1px}
+/* 손님 카드 */
+.cslot{background:linear-gradient(180deg,#FFFDF7,#FFF1D8)!important;border:2px solid #F6DCB2!important;border-radius:16px!important;box-shadow:0 2px 6px rgba(120,70,20,.08)}
+.cust-face{font-size:20px;line-height:1}
+.cust-order{height:30px;display:flex;align-items:center;justify-content:center;margin:1px 0}
+.cust-img{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.18))}
+.cust-nm{font-size:10px;color:#92400E;font-weight:800;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cslot.vip{border-color:#F59E0B!important;background:linear-gradient(180deg,#FFF7DC,#FFE7A6)!important;box-shadow:0 0 0 1px #F59E0B,0 2px 12px rgba(245,158,11,.55);animation:vipGlow 1.3s ease-in-out infinite}
+@keyframes vipGlow{0%,100%{box-shadow:0 0 0 1px #F59E0B,0 2px 8px rgba(245,158,11,.4)}50%{box-shadow:0 0 0 2px #FBBF24,0 2px 16px rgba(245,158,11,.75)}}
+/* 드래그 고스트 / 모달 타이틀 / 도감 */
+.ghost-img{width:56px;height:56px;object-fit:contain}
+.title-img{width:26px;height:26px;display:inline-block;vertical-align:middle;object-fit:contain}
+.dex-cell{background:#FFF7EC;border-radius:14px;padding:9px 4px;text-align:center;border:1px solid #F1D6AE}
+.dex-ic{display:flex;justify-content:center}
+.dex-img{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.15))}
+.dex-nm{font-size:11px;margin-top:3px;color:#7C2D12;font-weight:700;line-height:1.1}
+.dex-co{font-size:11px;color:#D97706;font-weight:800;margin-top:1px}
+/* 콤보 팝업 */
+@keyframes comboPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}80%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.12)}}
+.combo-el{position:fixed;left:50%;top:36%;z-index:1500;pointer-events:none;font-weight:900;text-align:center;animation:comboPop 1s ease-out forwards;text-shadow:0 2px 8px rgba(0,0,0,.35);white-space:nowrap}
 </style>
 </head>
 <body>
 
 <!-- HUD -->
 <div id="hud" class="flex items-center gap-2 px-3 py-2 bg-amber-600 text-white text-sm font-bold shadow flex-shrink-0">
-  <span id="h-coin">🪙 0</span>
-  <span id="h-gem">💎 0</span>
-  <span id="h-lv">⭐Lv.1</span>
+  <span class="res-chip"><img src="assets/ui_coin.png" alt="코인"><span id="h-coin">0</span></span>
+  <span class="res-chip"><img src="assets/ui_gem.png" alt="다이아"><span id="h-gem">0</span></span>
+  <span class="res-chip">⭐<span id="h-lv">Lv.1</span></span>
   <div class="flex-1"></div>
-  <span id="h-en">⚡0/20</span>
+  <span class="res-chip"><img src="assets/ui_energy.png" alt="에너지"><span id="h-en">0/20</span></span>
   <div class="w-14 h-2 bg-amber-800 rounded-full overflow-hidden">
     <div id="en-bar" class="h-full bg-yellow-300 rounded-full" style="width:100%"></div>
   </div>
@@ -91,38 +132,42 @@ body{background:#FFF8F0;font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-se
 // ── CONSTANTS ─────────────────────────────────────────────────────
 const COLS=6,ROWS=8,TOTAL=COLS*ROWS,MAX_EN=20,REGEN_MS=60000,SAVE='merge_restaurant_v1';
 
+// 단계마다 '다른' 3D 아이콘 → 한눈에 무엇이 무엇과 합쳐지는지 보임
 const TRAILS={
   tomato:{
-    gen:{icon:'🌱',name:'토마토 텃밭'},
+    gen:{img:'assets/gen_t.png',name:'토마토 텃밭'},
     items:[
-      {name:'방울토마토', icon:'🍅', coins:0,   patience:0},
-      {name:'토마토',     icon:'🍅', coins:10,  patience:30},
-      {name:'토마토 슬라이스', icon:'🍅', coins:25, patience:45},  // 🔪 제거
-      {name:'토마토 소스', icon:'🥫', coins:60,  patience:60},
-      {name:'마르게리타 피자', icon:'🍕', coins:150, patience:90},
+      {name:'새싹',          img:'assets/t1.png', coins:0,   patience:0},
+      {name:'토마토',        img:'assets/t2.png', coins:10,  patience:30},
+      {name:'토마토 샐러드',  img:'assets/t3.png', coins:25,  patience:45},
+      {name:'토마토 소스',    img:'assets/t4.png', coins:60,  patience:60},
+      {name:'마르게리타 피자', img:'assets/t5.png', coins:150, patience:90},
     ]
   },
   bread:{
-    gen:{icon:'🌾',name:'밀밭'},
+    gen:{img:'assets/gen_b.png',name:'빵집'},
     items:[
-      {name:'밀',     icon:'🌾', coins:0,   patience:0},
-      {name:'반죽',   icon:'🫓', coins:12,  patience:30},
-      {name:'빵',     icon:'🍞', coins:30,  patience:45},
-      {name:'샌드위치', icon:'🥪', coins:70,  patience:60},
-      {name:'햄버거', icon:'🍔', coins:160, patience:90},
+      {name:'밀',     img:'assets/b1.png', coins:0,   patience:0},
+      {name:'반죽',   img:'assets/b2.png', coins:12,  patience:30},
+      {name:'식빵',   img:'assets/b3.png', coins:30,  patience:45},
+      {name:'샌드위치', img:'assets/b4.png', coins:70,  patience:60},
+      {name:'햄버거', img:'assets/b5.png', coins:160, patience:90},
     ]
   },
   meat:{
-    gen:{icon:'🐄',name:'정육점'},
+    gen:{img:'assets/gen_m.png',name:'정육점'},
     items:[
-      {name:'생고기',    icon:'🥩', coins:0,   patience:0},
-      {name:'다진고기',  icon:'🔪', coins:15,  patience:35},  // 칼 = 다지는 동작
-      {name:'패티',      icon:'🫓', coins:35,  patience:50},
-      {name:'스테이크',  icon:'🍖', coins:80,  patience:65},
-      {name:'비프 플래터', icon:'🫕', coins:200, patience:90},
+      {name:'생고기',  img:'assets/m1.png', coins:0,   patience:0},
+      {name:'베이컨',  img:'assets/m2.png', coins:15,  patience:35},
+      {name:'미트볼',  img:'assets/m3.png', coins:35,  patience:50},
+      {name:'바비큐',  img:'assets/m4.png', coins:80,  patience:65},
+      {name:'고기 퐁듀', img:'assets/m5.png', coins:200, patience:90},
     ]
   }
 };
+// 아이템/생성기 아이콘 HTML (이미지 우선, 없으면 이모지 폴백)
+function iconImg(src,cls='item-img'){return `<img src="${src}" class="${cls}" draggable="false" alt="">`;}
+function itemIconHTML(trail,stage,cls){const inf=getItem(trail,stage);return inf?(inf.img?iconImg(inf.img,cls):`<span>${inf.icon||'?'}</span>`):'';}
 const TK=Object.keys(TRAILS);
 
 const LV_XP=[0,0,100,250,500,900,1400,2000,2800,3800,5000];
@@ -133,6 +178,17 @@ const LV_REWARD={
   7:{gen:'meat',    gems:5, msg:'정육점 생성기 해금! 💎+5'},
 };
 const CEMOJI=['👨','👩','👦','👧','👴','👵','🧑','👱','🧔','👮'];
+
+// ── 재미요소: 콤보 ─────────────────────────────────────────────────
+const COMBO_WINDOW=4500;       // 이 시간(ms) 안에 연속 서빙하면 콤보 유지
+let combo=0,comboT=0;
+function showCombo(n,mult){
+  const el=document.createElement('div');
+  el.className='combo-el';
+  el.innerHTML=`<div style="font-size:${20+Math.min(n,8)*2}px;color:#F59E0B">🔥 ${n} COMBO!</div>`+
+               `<div style="font-size:14px;color:#DC2626">보상 ×${mult.toFixed(2)}</div>`;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1000);
+}
 
 function unlockCost(idx){
   const row=Math.floor(idx/COLS);
@@ -226,10 +282,10 @@ function vib(...a){if(navigator.vibrate)navigator.vibrate(...a);}
 
 // ── RENDER ────────────────────────────────────────────────────────
 function renderHUD(){
-  document.getElementById('h-coin').textContent='🪙 '+S.coins.toLocaleString();
-  document.getElementById('h-gem').textContent='💎 '+(S.gems||0);
-  document.getElementById('h-lv').textContent='⭐Lv.'+S.level;
-  document.getElementById('h-en').textContent='⚡'+S.energy+'/'+MAX_EN;
+  document.getElementById('h-coin').textContent=S.coins.toLocaleString();
+  document.getElementById('h-gem').textContent=(S.gems||0);
+  document.getElementById('h-lv').textContent='Lv.'+S.level;
+  document.getElementById('h-en').textContent=S.energy+'/'+MAX_EN;
   document.getElementById('en-bar').style.width=(S.energy/MAX_EN*100)+'%';
   if(S.energy<MAX_EN){
     const left=Math.ceil((REGEN_MS-(Date.now()-S.energyLastAt))/1000);
@@ -245,7 +301,7 @@ function renderGens(){
     const g=TRAILS[t].gen,on=S.unlockedGens.includes(t);
     const d=document.createElement('div');
     d.className='gen-btn'+(on?'':' locked');
-    d.innerHTML=`<div class="text-2xl">${g.icon}</div><div class="text-xs text-center leading-tight text-green-800">${g.name}</div><div class="text-xs text-amber-600 mt-0.5">⚡-1</div>`;
+    d.innerHTML=`<div class="gen-ic">${g.img?iconImg(g.img,'gen-img'):g.icon}</div><div class="gen-nm">${g.name}</div><div class="gen-en">⚡-1</div>`;
     if(!on)d.innerHTML+=`<div class="text-xs text-gray-400 mt-0.5">잠김</div>`;
     if(on)d.addEventListener('pointerdown',e=>{e.stopPropagation();tapGen(t,d);});
     el.appendChild(d);
@@ -261,13 +317,11 @@ function renderBoard(){
     if(open){
       cell.className='cell open';
       if(it){
-        const inf=getItem(it.trail,it.stage);
-        cell.innerHTML=`<span class="pointer-events-none">${inf?.icon||'?'}</span>`;
-        if(it.stage>1){
-          const b=document.createElement('div');
-          b.className='absolute bottom-0.5 right-0.5 text-xs bg-amber-600 text-white rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none pointer-events-none';
-          b.textContent=it.stage;cell.appendChild(b);
-        }
+        cell.classList.add('stg'+it.stage);
+        cell.innerHTML=`<span class="pointer-events-none">${itemIconHTML(it.trail,it.stage)}</span>`;
+        const b=document.createElement('div');
+        b.className='stage-badge pointer-events-none';
+        b.textContent=it.stage;cell.appendChild(b);
       }
       cell.addEventListener('pointerdown',onPtrDown);
     }else{
@@ -304,11 +358,11 @@ function renderCusts(){
       const inf=getItem(c.trail,c.stage);
       const pct=Math.max(0,c.patience/c.maxPatience*100);
       const pc=pct>60?'#10B981':pct>30?'#F59E0B':'#EF4444';
-      d.className='cslot';d.dataset.cslot=s;
+      d.className='cslot'+(c.vip?' vip':'');d.dataset.cslot=s;
       d.innerHTML=
-        `<div class="text-xl pointer-events-none">${c.emoji}</div>`+
-        `<div class="text-xl pointer-events-none">${inf?.icon||'?'}</div>`+
-        `<div class="text-xs text-center leading-tight text-amber-800 pointer-events-none" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%">${inf?.name||''}</div>`+
+        `<div class="cust-face pointer-events-none">${c.vip?'👑':''}${c.emoji}</div>`+
+        `<div class="cust-order pointer-events-none">${itemIconHTML(c.trail,c.stage,'cust-img')}</div>`+
+        `<div class="cust-nm pointer-events-none">${inf?.name||''}</div>`+
         `<div class="pbar"><div class="pfill" style="width:${pct}%;background:${pc}"></div></div>`;
       if(pct<20)d.style.borderColor='#EF4444';
     }else{
@@ -368,7 +422,7 @@ function startDrag(idx,e){
   const it=S.board[idx];
   const inf=getItem(it.trail,it.stage);if(!inf)return;
   const ghost=document.createElement('div');
-  ghost.className='ghost';ghost.textContent=inf.icon;
+  ghost.className='ghost';ghost.innerHTML=inf.img?iconImg(inf.img,'ghost-img'):inf.icon;
   ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';
   document.body.appendChild(ghost);
   DRG={idx,ghost};
@@ -429,7 +483,7 @@ function showItemMenu(cellIdx){
   const statusMsg=canServe
     ? `<span class="text-green-600 font-bold">✅ 서빙 가능</span> · 보상 🪙${inf.coins}`
     : `<span class="text-gray-400">단계 올리면 서빙 가능 (지금은 합치기만 됩니다)</span>`;
-  showModal(inf.icon+' '+inf.name,
+  showModal(`${inf.img?iconImg(inf.img,'title-img'):inf.icon} ${inf.name}`,
     `<p class="text-sm text-center mb-1">단계 ${it.stage} / ${maxStg(it.trail)}</p>`+
     `<p class="text-sm text-center mb-4">${statusMsg}</p>`+
     `<button onclick="sellItem(${cellIdx})" class="w-full bg-red-100 text-red-600 py-2.5 rounded-xl font-bold">🗑️ 팔기 (🪙 ${sellPrice})</button>`+
@@ -481,19 +535,28 @@ function doServe(cellIdx,slot,custEl){
   const c=S.customers.find(x=>x.slot===slot);if(!c)return;
   if(it.trail===c.trail&&it.stage===c.stage){
     const inf=getItem(c.trail,c.stage);
-    const coins=inf?.coins||0;
+    const base=inf?.coins||0;
+    // 콤보: 짧은 간격으로 연속 서빙 → 배수 증가 / VIP면 2.5배
+    const now=Date.now();
+    combo=(now-comboT<COMBO_WINDOW)?combo+1:1;comboT=now;
+    const cmult=1+0.25*(Math.min(combo,8)-1);
+    const coins=Math.round(base*(c.vip?2.5:1)*cmult);
     S.board[cellIdx]=null;
     S.coins+=coins;
     S.xp+=Math.floor(coins/2);
+    if(c.vip){S.gems=(S.gems||0)+1;}
     checkLvUp();
     const r=custEl.getBoundingClientRect();
-    floatEl(r.left+r.width/2,r.top,'💖','1.8em');
+    floatEl(r.left+r.width/2,r.top,c.vip?'👑':'💖','1.8em');
+    floatEl(r.left+r.width/2,r.top-20,'+🪙'+coins,'1.05em');
     coinFly(r,Math.ceil(coins/40));
-    vib([40,20,80]);
+    if(combo>=2)showCombo(combo,cmult);
+    vib(c.vip?[60,20,60,20,90]:[40,20,80]);
     S.customers=S.customers.filter(x=>x.slot!==slot);
     S.custNextAt[slot]=Date.now()+5000+Math.random()*10000;
     renderBoard();renderCusts();renderHUD();save();
   }else{
+    combo=0;                                  // 잘못 서빙하면 콤보 끊김
     toast('주문과 다른 음식이에요! ❌');vib(40);
     const cel=document.querySelector(`[data-cell="${cellIdx}"]`);
     if(cel){cel.classList.add('do-shake');setTimeout(()=>cel.classList.remove('do-shake'),300);}
@@ -528,7 +591,9 @@ function spawnCust(slot){
   const stage=lo+Math.floor(Math.random()*(hi-lo+1));
   const inf=getItem(trail,stage);
   if(!inf||!inf.patience)return;
-  S.customers.push({slot,trail,stage,patience:inf.patience,maxPatience:inf.patience,
+  const vip=Math.random()<0.12;                       // VIP 손님(👑): 보상 2.5배 + 다이아
+  const pat=vip?Math.round(inf.patience*1.4):inf.patience;
+  S.customers.push({slot,trail,stage,patience:pat,maxPatience:pat,vip,
     emoji:CEMOJI[Math.floor(Math.random()*CEMOJI.length)],appearedAt:Date.now()});
 }
 
@@ -636,7 +701,7 @@ function openDex(){
   S.unlockedTrails.forEach(t=>{
     TRAILS[t].items.forEach((it,i)=>{
       const canServe=it.patience>0;
-      h+=`<div class="bg-amber-50 rounded-xl p-2 text-center ${canServe?'':'opacity-50'}"><div class="text-2xl">${it.icon}</div><div class="text-xs mt-0.5 text-amber-900 leading-tight">${it.name}</div><div class="text-xs text-amber-500">${it.coins?'🪙'+it.coins:'-'}</div></div>`;
+      h+=`<div class="dex-cell ${canServe?'':'opacity-50'}"><div class="dex-ic">${it.img?iconImg(it.img,'dex-img'):it.icon}</div><div class="dex-nm">${it.name}</div><div class="dex-co">${it.coins?'🪙'+it.coins:'-'}</div></div>`;
     });
   });
   h+='</div><p class="text-xs text-gray-400 mt-2 text-center">흐린 아이템은 단계를 올려야 서빙 가능</p><button onclick="closeModal()" class="mt-3 w-full bg-gray-100 py-2 rounded-xl text-gray-600">닫기</button>';
@@ -647,11 +712,18 @@ function openDex(){
 function claimDaily(){
   const now=Date.now(),day=86400000;
   if(now-(S.dailyClaimed||0)<day){toast(`🎁 ${Math.ceil((day-(now-(S.dailyClaimed||0)))/3600000)}시간 후 수령 가능`);return;}
-  S.coins+=200;S.gems=(S.gems||0)+3;S.energy=MAX_EN;S.energyLastAt=Date.now();S.dailyClaimed=now;
+  // 연속 출석: 지난 수령이 48시간 이내면 streak 유지, 끊겼으면 1로 리셋
+  S.dailyStreak=(S.dailyClaimed&&now-S.dailyClaimed<2*day)?(S.dailyStreak||0)+1:1;
+  const st=S.dailyStreak;
+  const coins=150+Math.min(st,7)*50;          // 연속일수록 보상↑ (최대 500)
+  const gems=2+Math.min(st,5);
+  S.coins+=coins;S.gems=(S.gems||0)+gems;S.energy=MAX_EN;S.energyLastAt=Date.now();S.dailyClaimed=now;
   renderHUD();save();
   showModal('🎁 일일 보너스!',
-    `<div class="text-center py-2"><div class="text-5xl mb-3">🎁</div><div class="font-bold text-lg mb-3">보너스 수령!</div>`+
-    `<div class="space-y-1"><div class="text-amber-600 font-bold">🪙 +200 코인</div><div class="text-blue-600 font-bold">💎 +3 다이아</div><div class="text-yellow-600 font-bold">⚡ 에너지 완충</div></div>`+
+    `<div class="text-center py-2"><div class="text-5xl mb-2">🎁</div>`+
+    `<div class="font-bold text-lg mb-1">🔥 ${st}일 연속 출석!</div>`+
+    `<div class="text-xs text-gray-400 mb-3">연속 출석할수록 보상이 커져요</div>`+
+    `<div class="space-y-1"><div class="text-amber-600 font-bold">🪙 +${coins} 코인</div><div class="text-blue-600 font-bold">💎 +${gems} 다이아</div><div class="text-yellow-600 font-bold">⚡ 에너지 완충</div></div>`+
     `<button onclick="closeModal()" class="mt-4 w-full bg-amber-500 text-white py-2.5 rounded-xl font-bold">감사합니다!</button></div>`);
 }
 

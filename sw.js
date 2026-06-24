@@ -1,5 +1,10 @@
-const CACHE = 'merge-restaurant-v2';
-const FILES = ['./', './index.html', './manifest.json', './icon.svg'];
+const CACHE = 'merge-restaurant-v3';
+const FILES = ['./', './index.html', './manifest.json', './icon.svg',
+  'assets/t1.png','assets/t2.png','assets/t3.png','assets/t4.png','assets/t5.png',
+  'assets/b1.png','assets/b2.png','assets/b3.png','assets/b4.png','assets/b5.png',
+  'assets/m1.png','assets/m2.png','assets/m3.png','assets/m4.png','assets/m5.png',
+  'assets/gen_t.png','assets/gen_b.png','assets/gen_m.png',
+  'assets/ui_coin.png','assets/ui_gem.png','assets/ui_energy.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));
